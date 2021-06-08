@@ -4,6 +4,7 @@
 		"activities": [
 			{
 				"name": "Copy Data From Blob To Synapse",
+				"description": "This activity copies the data from the blob storage and loads it into the synapse sql pool.",
 				"type": "Copy",
 				"dependsOn": [
 					{
