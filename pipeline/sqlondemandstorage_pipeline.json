@@ -89,6 +89,12 @@
 				}
 			}
 		],
+		"parameters": {
+			"SchemaName": {
+				"type": "string",
+				"defaultValue": "dbo"
+			}
+		},
 		"annotations": []
 	}
 }
