@@ -303,8 +303,8 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobStorageLocation",
-						"fileName": "yellow_tripdata_*-*.csv",
-						"folderPath": "taxi",
+						"fileName": "population.csv",
+						"folderPath": "population",
 						"container": "csv"
 					},
 					"columnDelimiter": ",",
