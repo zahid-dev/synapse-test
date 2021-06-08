@@ -303,7 +303,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobStorageLocation",
-						"fileName": "*.csv",
+						"fileName": "yellow_tripdata_*-*.csv",
 						"folderPath": "taxi",
 						"container": "csv"
 					},
