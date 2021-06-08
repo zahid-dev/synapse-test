@@ -5,8 +5,8 @@
 		"annotations": [],
 		"type": "AzureBlobStorage",
 		"typeProperties": {
-			"sasUri": "https://nytaxiblob.blob.core.windows.net/",
-			"encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIlNZTkFQU0VXU01TRlRfNGU1MmI0ZjAtZDUxNy00YWY3LWFhNGUtY2U4ZmEyNWFjZTdiIg0KfQ=="
+			"sasUri": "https://sqlondemandstorage.blob.core.windows.net/",
+			"encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIlNZTkFQU0VXU01TRlRfYTU5MTY0OGItYjViZC00ZTM5LWIwMDctOTQ4NGYwNTc4NDI3Ig0KfQ=="
 		},
 		"connectVia": {
 			"referenceName": "AutoResolveIntegrationRuntime",
