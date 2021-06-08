@@ -103,7 +103,7 @@
 		"parameters": {
 			"SchemaName": {
 				"type": "string",
-				"defaultValue": "dbo"
+				"defaultValue": "dboxyz"
 			}
 		},
 		"annotations": []
