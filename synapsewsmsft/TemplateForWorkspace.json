@@ -370,7 +370,7 @@
 					"location": {
 						"type": "AzureBlobStorageLocation",
 						"fileName": "population.csv",
-						"folderPath": "population-unix-hdr-tsv",
+						"folderPath": "population-unix-hdr",
 						"container": "csv"
 					},
 					"columnDelimiter": ",",
