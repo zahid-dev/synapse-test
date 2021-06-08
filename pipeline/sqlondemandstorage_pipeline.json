@@ -35,6 +35,10 @@
 					},
 					"sink": {
 						"type": "SqlPoolSink",
+						"preCopyScript": {
+							"value": "IF OBJECT_ID('[@{pipeline().parameters.SchemaName}].[population]', 'U') IS NOT NULL\n\nBEGIN\n\nDROP TABLE [@{pipeline().parameters.SchemaName}].[population];\n\nEND",
+							"type": "Expression"
+						},
 						"tableOption": "autoCreate"
 					},
 					"enableStaging": false,
@@ -56,7 +60,13 @@
 				"outputs": [
 					{
 						"referenceName": "sinkSynapseDataset",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"SchemaName": {
+								"value": "[@{pipeline().parameters.SchemaName}]",
+								"type": "Expression"
+							}
+						}
 					}
 				]
 			},

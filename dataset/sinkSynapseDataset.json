@@ -1,12 +1,20 @@
 {
 	"name": "sinkSynapseDataset",
 	"properties": {
+		"parameters": {
+			"SchemaName": {
+				"type": "string"
+			}
+		},
 		"annotations": [],
 		"type": "SqlPoolTable",
 		"schema": [],
 		"typeProperties": {
-			"schema": "dbo",
-			"table": "taxi"
+			"schema": {
+				"value": "@dataset().SchemaName",
+				"type": "Expression"
+			},
+			"table": "population"
 		},
 		"sqlPool": {
 			"referenceName": "sqlpoolmsft",
