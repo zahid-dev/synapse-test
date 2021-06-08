@@ -22,6 +22,9 @@
 		},
 		"synapsewsmsft-WorkspaceDefaultStorage_properties_typeProperties_url": {
 			"value": "https://adlsmsft.dfs.core.windows.net"
+		},
+		"nycBlobLinkedservice_sasUri": {
+			"value": ""
 		}
 	}
 }
