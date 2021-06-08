@@ -37,7 +37,7 @@
 					"sink": {
 						"type": "SqlPoolSink",
 						"preCopyScript": {
-							"value": "IF OBJECT_ID('[@{pipeline().parameters.SchemaName}].[population]', 'U') IS NOT NULL\n\nBEGIN\n\nDROP TABLE [@{pipeline().parameters.SchemaName}].[population];\n\nEND",
+							"value": "IF OBJECT_ID(''[@{pipeline().parameters.SchemaName}].[population]'', ''U'') IS NOT NULL\n\nBEGIN\n\nDROP TABLE [@{pipeline().parameters.SchemaName}].[population];\n\nEND",
 							"type": "Expression"
 						},
 						"tableOption": "autoCreate"
@@ -103,7 +103,7 @@
 		"parameters": {
 			"SchemaName": {
 				"type": "string",
-				"defaultValue": "dboxyzzzz"
+				"defaultValue": "dbo"
 			}
 		},
 		"annotations": []

@@ -11,12 +11,12 @@
 			"location": {
 				"type": "AzureBlobStorageLocation",
 				"fileName": "population.csv",
-				"folderPath": "population",
+				"folderPath": "population-unix-hdr-tsv",
 				"container": "csv"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
-			"firstRowAsHeader": false,
+			"firstRowAsHeader": true,
 			"quoteChar": "\""
 		},
 		"schema": []
