@@ -17,14 +17,14 @@
 		"demoemumbapocws1-WorkspaceDefaultStorage_properties_typeProperties_url": {
 			"value": "https://dlsdemoemumbapoc.dfs.core.windows.net/"
 		},
+		"nycBlobLinkedservice_sasUri": {
+			"value": ""
+		},
 		"synapsews-arm-test-WorkspaceDefaultStorage_properties_typeProperties_url": {
 			"value": "https://armtestadls.dfs.core.windows.net"
 		},
 		"synapsewsmsft-WorkspaceDefaultStorage_properties_typeProperties_url": {
 			"value": "https://adlsmsft.dfs.core.windows.net"
-		},
-		"nycBlobLinkedservice_sasUri": {
-			"value": ""
 		}
 	}
 }
