@@ -64,7 +64,7 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"SchemaName": {
-								"value": "[@{pipeline().parameters.SchemaName}]",
+								"value": "@{pipeline().parameters.SchemaName}",
 								"type": "Expression"
 							}
 						}
