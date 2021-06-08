@@ -1,5 +1,5 @@
 {
-	"name": "SqlPoolSinkDataset",
+	"name": "sinkSynapseDataset",
 	"properties": {
 		"annotations": [],
 		"type": "SqlPoolTable",

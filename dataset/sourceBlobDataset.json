@@ -1,8 +1,8 @@
 {
-	"name": "DelimitedText1",
+	"name": "sourceBlobDataset",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "nycBlobLinkedservice",
+			"referenceName": "sourceBlobLinkedservice",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
