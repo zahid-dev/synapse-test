@@ -4,6 +4,10 @@
 		"annotations": [],
 		"type": "SqlPoolTable",
 		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Date"
+		},
 		"sqlPool": {
 			"referenceName": "sqlpoolmsft",
 			"type": "SqlPoolReference"
