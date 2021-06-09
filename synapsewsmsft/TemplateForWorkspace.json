@@ -269,15 +269,15 @@
 							"dataflow": {
 								"referenceName": "blobToSynapse_Dataflow",
 								"type": "DataFlowReference",
-								"parameters": {},
+								"parameters": {
+									"SchemaName": {
+										"value": "'@{pipeline().parameters.SchemaName}'",
+										"type": "Expression"
+									}
+								},
 								"datasetParameters": {
 									"sourceBlob": {},
-									"sinkSynapse": {
-										"SchemaName": {
-											"value": "@pipeline().parameters.SchemaName",
-											"type": "Expression"
-										}
-									}
+									"sinkSynapse": {}
 								}
 							},
 							"staging": {
@@ -337,34 +337,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/linkedServices/sinkSynapseLinkedservice')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/sourceBlobDataset')]",
-			"type": "Microsoft.Synapse/workspaces/datasets",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "sourceBlobLinkedservice",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"folderPath": "taxi",
-						"container": "csv"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": []
-			},
-			"dependsOn": [
-				"[concat(variables('workspaceId'), '/linkedServices/sourceBlobLinkedservice')]"
 			]
 		},
 		{
@@ -494,29 +466,29 @@
 				"typeProperties": {
 					"sources": [
 						{
-							"dataset": {
-								"referenceName": "sourceBlobDataset",
-								"type": "DatasetReference"
+							"linkedService": {
+								"referenceName": "sourceBlobLinkedservice",
+								"type": "LinkedServiceReference"
 							},
 							"name": "sourceBlob"
 						}
 					],
 					"sinks": [
 						{
-							"dataset": {
-								"referenceName": "sinkSynapseDataset",
-								"type": "DatasetReference"
+							"linkedService": {
+								"referenceName": "sinkSynapseLinkedservice",
+								"type": "LinkedServiceReference"
 							},
 							"name": "sinkSynapse"
 						}
 					],
 					"transformations": [],
-					"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tinferDriftedColumnTypes: true) ~> sourceBlob\nsourceBlob sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tstaged: true,\n\tallowCopyCommand: true,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sinkSynapse"
+					"script": "parameters{\n\tSchemaName as string\n}\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tinferDriftedColumnTypes: true,\n\tformat: 'delimited',\n\tcontainer: 'csv',\n\tcolumnDelimiter: ',',\n\tescapeChar: '\\\\',\n\tqutoChar: '\\\"',\n\tcolumnNamesAsHeader: false,\n\twildcardPaths:['taxi/yellow_tripdata_*-*.csv']) ~> sourceBlob\nsourceBlob sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'table',\n\tstore: 'synapseanalytics',\n\tschemaName: ($SchemaName),\n\ttableName: 'taxiYellowTrip',\n\tinsertable: true,\n\tupdateable: false,\n\tdeletable: false,\n\tupsertable: false,\n\tstaged: true,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sinkSynapse"
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('workspaceId'), '/datasets/sourceBlobDataset')]",
-				"[concat(variables('workspaceId'), '/datasets/sinkSynapseDataset')]"
+				"[concat(variables('workspaceId'), '/linkedServices/sourceBlobLinkedservice')]",
+				"[concat(variables('workspaceId'), '/linkedServices/sinkSynapseLinkedservice')]"
 			]
 		},
 		{
@@ -568,6 +540,34 @@
 			"apiVersion": "2019-06-01-preview",
 			"properties": {},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/sourceBlobDataset')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "sourceBlobLinkedservice",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": "taxi",
+						"container": "csv"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/sourceBlobLinkedservice')]"
+			]
 		}
 	]
 }
