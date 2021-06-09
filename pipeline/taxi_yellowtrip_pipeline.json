@@ -64,11 +64,7 @@
 						}
 					},
 					"staging": {
-						"linkedService": {
-							"referenceName": "synapsewsmsft-WorkspaceDefaultStorage",
-							"type": "LinkedServiceReference"
-						},
-						"folderPath": "filesystemmsft/polyBaseStage"
+						"folderPath": ""
 					},
 					"compute": {
 						"coreCount": 8,
