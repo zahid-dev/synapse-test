@@ -28,6 +28,7 @@
 						"storeSettings": {
 							"type": "AzureBlobStorageReadSettings",
 							"recursive": true,
+							"wildcardFolderPath": "taxi",
 							"enablePartitionDiscovery": false
 						},
 						"formatSettings": {
