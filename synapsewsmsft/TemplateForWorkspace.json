@@ -11,6 +11,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'synapsewsmsft-WorkspaceDefaultSqlServer'"
 		},
+		"sinkSynapseLinkedservice_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'sinkSynapseLinkedservice'"
+		},
 		"sourceBlobLinkedservice_sasUri": {
 			"type": "secureString",
 			"metadata": "Secure string for 'sasUri' of 'sourceBlobLinkedservice'"
@@ -199,7 +203,7 @@
 					}
 				},
 				"annotations": [],
-				"lastPublishTime": "2021-06-04T12:08:11Z"
+				"lastPublishTime": "2021-06-08T11:30:09Z"
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/datasets/sqlPoolSchema')]",
@@ -271,7 +275,7 @@
 						],
 						"outputs": [
 							{
-								"referenceName": "sinkSynapseDataset",
+								"referenceName": "sinkSynapseSqlDedicatedPoolDataset",
 								"type": "DatasetReference",
 								"parameters": {
 									"SchemaName": {
@@ -318,16 +322,17 @@
 						"defaultValue": "dbo"
 					}
 				},
-				"annotations": []
+				"annotations": [],
+				"lastPublishTime": "2021-06-08T12:46:39Z"
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/datasets/sourceBlobDataset')]",
-				"[concat(variables('workspaceId'), '/datasets/sinkSynapseDataset')]",
+				"[concat(variables('workspaceId'), '/datasets/sinkSynapseSqlDedicatedPoolDataset')]",
 				"[concat(variables('workspaceId'), '/datasets/sqlPoolSchema')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/sinkSynapseDataset')]",
+			"name": "[concat(parameters('workspaceName'), '/sinkSynapseSqlDedicatedPoolDataset')]",
 			"type": "Microsoft.Synapse/workspaces/datasets",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
@@ -479,15 +484,9 @@
 							"timeToLive": 0
 						}
 					}
-				},
-				"managedVirtualNetwork": {
-					"type": "ManagedVirtualNetworkReference",
-					"referenceName": "default"
 				}
 			},
-			"dependsOn": [
-				"[concat(variables('workspaceId'), '/managedVirtualNetworks/default')]"
-			]
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('workspaceName'), '/WorkspaceSystemIdentity')]",
@@ -538,6 +537,188 @@
 			"apiVersion": "2019-06-01-preview",
 			"properties": {},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/taxi_yellowtrip_pipeline')]",
+			"type": "Microsoft.Synapse/workspaces/pipelines",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"activities": [
+					{
+						"name": "Create Schema If Not Exists",
+						"description": "This activity creates the schema, if not exists. The name of the schema is specified in the pipeline parameter 'SchemaName\".",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.00:03:00",
+							"retry": 3,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlPoolSource",
+								"sqlReaderQuery": {
+									"value": "IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = '@{pipeline().parameters.SchemaName}')\nBEGIN\nEXEC('CREATE SCHEMA @{pipeline().parameters.SchemaName}')\nselect Count(*) from sys.symmetric_keys;\nEND\nELSE\nBEGIN\n    select Count(*) from sys.symmetric_keys;\nEND",
+									"type": "Expression"
+								}
+							},
+							"dataset": {
+								"referenceName": "sqlPoolSchema",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "Copy Data From Blob To Synapse",
+						"description": "This activity copies the data from the blob storage and loads it into the synapse sql pool.",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [
+							{
+								"activity": "Create Schema If Not Exists",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.01:00:00",
+							"retry": 3,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "blobToSynapse_Dataflow",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"sourceBlob": {},
+									"sinkSynapse": {
+										"SchemaName": {
+											"value": "@pipeline().parameters.SchemaName",
+											"type": "Expression"
+										}
+									}
+								}
+							},
+							"staging": {
+								"linkedService": {
+									"referenceName": "synapsewsmsft-WorkspaceDefaultStorage",
+									"type": "LinkedServiceReference"
+								},
+								"folderPath": "filesystemmsft/polyBaseStage"
+							},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"parameters": {
+					"SchemaName": {
+						"type": "string",
+						"defaultValue": "dbo"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/datasets/sqlPoolSchema')]",
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
+				"[concat(variables('workspaceId'), '/dataflows/blobToSynapse_Dataflow')]",
+				"[concat(variables('workspaceId'), '/linkedServices/synapsewsmsft-WorkspaceDefaultStorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/blobToSynapse_Dataflow')]",
+			"type": "Microsoft.Synapse/workspaces/dataflows",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "sourceBlobDataset",
+								"type": "DatasetReference"
+							},
+							"name": "sourceBlob"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "sinkSynapseDataset",
+								"type": "DatasetReference"
+							},
+							"name": "sinkSynapse"
+						}
+					],
+					"transformations": [],
+					"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tinferDriftedColumnTypes: true) ~> sourceBlob\nsourceBlob sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tstaged: true,\n\tallowCopyCommand: true,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sinkSynapse"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/datasets/sourceBlobDataset')]",
+				"[concat(variables('workspaceId'), '/datasets/sinkSynapseDataset')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/sinkSynapseLinkedservice')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDW",
+				"typeProperties": {
+					"connectionString": "[parameters('sinkSynapseLinkedservice_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/sinkSynapseDataset')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "sinkSynapseLinkedservice",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"SchemaName": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlDWTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": {
+						"value": "@dataset().SchemaName",
+						"type": "Expression"
+					},
+					"table": "yellow_trip"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/sinkSynapseLinkedservice')]"
+			]
 		}
 	]
 }

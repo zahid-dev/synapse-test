@@ -8,6 +8,9 @@
 		"synapsewsmsft-WorkspaceDefaultSqlServer_connectionString": {
 			"value": ""
 		},
+		"sinkSynapseLinkedservice_connectionString": {
+			"value": ""
+		},
 		"sourceBlobLinkedservice_sasUri": {
 			"value": ""
 		},
