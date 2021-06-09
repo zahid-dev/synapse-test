@@ -5,10 +5,10 @@
 		"workspaceName": {
 			"value": "synapsewsmsft"
 		},
-		"synapsewsmsft-WorkspaceDefaultSqlServer_connectionString": {
+		"sinkSynapseLinkedservice_connectionString": {
 			"value": ""
 		},
-		"sinkSynapseLinkedservice_connectionString": {
+		"synapsewsmsft-WorkspaceDefaultSqlServer_connectionString": {
 			"value": ""
 		},
 		"sourceBlobLinkedservice_sasUri": {
