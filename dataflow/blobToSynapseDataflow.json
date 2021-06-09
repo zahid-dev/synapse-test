@@ -1,5 +1,5 @@
 {
-	"name": "BlobToSynapseDataflow",
+	"name": "blobToSynapseDataflow",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
