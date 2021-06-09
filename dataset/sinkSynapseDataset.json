@@ -1,0 +1,24 @@
+{
+	"name": "sinkSynapseDataset",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "sinkSynapseLinkedservice",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"SchemaName": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlDWTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": {
+				"value": "@dataset().SchemaName",
+				"type": "Expression"
+			},
+			"table": "yellow_trip"
+		}
+	}
+}

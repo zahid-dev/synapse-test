@@ -1,5 +1,5 @@
 {
-	"name": "sinkSynapseDataset",
+	"name": "sinkSynapseSqlDedicatedPoolDataset",
 	"properties": {
 		"parameters": {
 			"SchemaName": {
