@@ -54,12 +54,10 @@
 					"dataflow": {
 						"referenceName": "blobToSynapse_Dataflow",
 						"type": "DataFlowReference",
-						"datasetParameters": {
-							"sinkSynapse": {
-								"SchemaName": {
-									"value": "@pipeline().parameters.SchemaName",
-									"type": "Expression"
-								}
+						"parameters": {
+							"SchemaName": {
+								"value": "'@{pipeline().parameters.SchemaName}'",
+								"type": "Expression"
 							}
 						}
 					},
