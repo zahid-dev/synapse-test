@@ -8,8 +8,14 @@
 		"synapsewsmsft-WorkspaceDefaultSqlServer_connectionString": {
 			"value": ""
 		},
+		"sinkSynapseLinkedservice_connectionString": {
+			"value": ""
+		},
 		"synapsewsmsft-WorkspaceDefaultStorage_properties_typeProperties_url": {
 			"value": "https://adlsmsft.dfs.core.windows.net"
+		},
+		"sourceBlobLinkedservice_sasUri": {
+			"value": ""
 		}
 	}
 }
