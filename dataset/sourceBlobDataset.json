@@ -10,8 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "population.csv",
-				"folderPath": "population-unix-hdr",
+				"folderPath": "taxi",
 				"container": "csv"
 			},
 			"columnDelimiter": ",",
