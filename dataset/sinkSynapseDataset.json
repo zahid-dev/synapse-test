@@ -20,5 +20,6 @@
 			"referenceName": "sqlpoolmsft",
 			"type": "SqlPoolReference"
 		}
-	}
+	},
+	"type": "Microsoft.Synapse/workspaces/datasets"
 }
