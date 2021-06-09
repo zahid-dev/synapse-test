@@ -3,68 +3,6 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy Data From Blob To Synapse",
-				"description": "This activity copies the data from the blob storage and loads it into the synapse sql pool.",
-				"type": "Copy",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "0.00:10:00",
-					"retry": 3,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"source": {
-						"type": "DelimitedTextSource",
-						"storeSettings": {
-							"type": "AzureBlobStorageReadSettings",
-							"recursive": true,
-							"enablePartitionDiscovery": false
-						},
-						"formatSettings": {
-							"type": "DelimitedTextReadSettings"
-						}
-					},
-					"sink": {
-						"type": "SqlPoolSink",
-						"preCopyScript": {
-							"value": "IF OBJECT_ID('[@{pipeline().parameters.SchemaName}].[population]', 'U') IS NOT NULL\n\nBEGIN\n\nDROP TABLE [@{pipeline().parameters.SchemaName}].[population];\n\nEND",
-							"type": "Expression"
-						},
-						"tableOption": "autoCreate"
-					},
-					"enableStaging": false,
-					"translator": {
-						"type": "TabularTranslator",
-						"typeConversion": true,
-						"typeConversionSettings": {
-							"allowDataTruncation": true,
-							"treatBooleanAsNumber": false
-						}
-					}
-				},
-				"inputs": [
-					{
-						"referenceName": "sourceBlobDataset",
-						"type": "DatasetReference"
-					}
-				],
-				"outputs": [
-					{
-						"referenceName": "sinkSynapseSqlDedicatedPoolDataset",
-						"type": "DatasetReference",
-						"parameters": {
-							"SchemaName": {
-								"value": "@{pipeline().parameters.SchemaName}",
-								"type": "Expression"
-							}
-						}
-					}
-				]
-			},
-			{
 				"name": "Create Schema If Not Exists",
 				"description": "This activity creates the schema, if not exists. The name of the schema is specified in the pipeline parameter 'SchemaName\".",
 				"type": "Lookup",
@@ -93,12 +31,20 @@
 				}
 			},
 			{
-				"name": "Data flow1",
+				"name": "Copy Data From Blob To Synapse",
+				"description": "This activity copies the data from the blob storage and loads it into the synapse sql pool.",
 				"type": "ExecuteDataFlow",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Create Schema If Not Exists",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
-					"timeout": "1.00:00:00",
-					"retry": 0,
+					"timeout": "0.01:00:00",
+					"retry": 3,
 					"retryIntervalInSeconds": 30,
 					"secureOutput": false,
 					"secureInput": false
@@ -116,6 +62,13 @@
 								}
 							}
 						}
+					},
+					"staging": {
+						"linkedService": {
+							"referenceName": "synapsewsmsft-WorkspaceDefaultStorage",
+							"type": "LinkedServiceReference"
+						},
+						"folderPath": "filesystemmsft/polyBaseStage"
 					},
 					"compute": {
 						"coreCount": 8,
