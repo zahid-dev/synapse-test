@@ -366,6 +366,56 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/createSchemaDataset')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "sinkSynapseLinkedservice",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"SynapseWorkspaceName": {
+							"value": "@dataset().SynapseWorkspaceName",
+							"type": "Expression"
+						},
+						"SQLDedicatedPoolName": {
+							"value": "@dataset().SQLDedicatedPoolName",
+							"type": "Expression"
+						},
+						"SQLLoginUsername": {
+							"value": "@dataset().SQLLoginUsername",
+							"type": "Expression"
+						},
+						"keyVaultName": {
+							"value": "@dataset().keyVaultName",
+							"type": "Expression"
+						}
+					}
+				},
+				"parameters": {
+					"SynapseWorkspaceName": {
+						"type": "string"
+					},
+					"SQLDedicatedPoolName": {
+						"type": "string"
+					},
+					"SQLLoginUsername": {
+						"type": "string"
+					},
+					"keyVaultName": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlDWTable",
+				"schema": [],
+				"typeProperties": {}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/sinkSynapseLinkedservice')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/sinkSynapseDataset')]",
 			"type": "Microsoft.Synapse/workspaces/datasets",
 			"apiVersion": "2019-06-01-preview",
@@ -700,56 +750,6 @@
 			"apiVersion": "2019-06-01-preview",
 			"properties": {},
 			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/createSchemaDataset')]",
-			"type": "Microsoft.Synapse/workspaces/datasets",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "sinkSynapseLinkedservice",
-					"type": "LinkedServiceReference",
-					"parameters": {
-						"SynapseWorkspaceName": {
-							"value": "@dataset().SynapseWorkspaceName",
-							"type": "Expression"
-						},
-						"SQLDedicatedPoolName": {
-							"value": "@dataset().SQLDedicatedPoolName",
-							"type": "Expression"
-						},
-						"SQLLoginUsername": {
-							"value": "@dataset().SQLLoginUsername",
-							"type": "Expression"
-						},
-						"keyVaultName": {
-							"value": "@dataset().keyVaultName",
-							"type": "Expression"
-						}
-					}
-				},
-				"parameters": {
-					"SynapseWorkspaceName": {
-						"type": "string"
-					},
-					"SQLDedicatedPoolName": {
-						"type": "string"
-					},
-					"SQLLoginUsername": {
-						"type": "string"
-					},
-					"keyVaultName": {
-						"type": "string"
-					}
-				},
-				"annotations": [],
-				"type": "AzureSqlDWTable",
-				"schema": [],
-				"typeProperties": {}
-			},
-			"dependsOn": [
-				"[concat(variables('workspaceId'), '/linkedServices/sinkSynapseLinkedservice')]"
-			]
 		}
 	]
 }
