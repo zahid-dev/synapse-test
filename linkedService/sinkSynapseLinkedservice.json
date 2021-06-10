@@ -25,7 +25,10 @@
 					"referenceName": "keyVaultLinkedservice",
 					"type": "LinkedServiceReference",
 					"parameters": {
-						"keyVaultName": "kvmsft"
+						"keyVaultName": {
+							"value": "@linkedService().keyVaultName",
+							"type": "Expression"
+						}
 					}
 				},
 				"secretName": "synapseSqlLoginPassword"
