@@ -31,6 +31,9 @@
 			},
 			"SQLLoginUsername": {
 				"type": "string"
+			},
+			"keyVaultName": {
+				"type": "string"
 			}
 		},
 		"annotations": [],
