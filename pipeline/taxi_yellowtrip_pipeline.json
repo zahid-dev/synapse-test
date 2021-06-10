@@ -82,6 +82,18 @@
 			"SchemaName": {
 				"type": "string",
 				"defaultValue": "dbo"
+			},
+			"Synapse Workspace Name": {
+				"type": "string"
+			},
+			"SQL Dedicated Pool Name": {
+				"type": "string"
+			},
+			"SQL Login Username": {
+				"type": "string"
+			},
+			"SQL Login Password": {
+				"type": "securestring"
 			}
 		},
 		"annotations": []
