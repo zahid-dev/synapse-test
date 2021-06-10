@@ -15,6 +15,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'synapsewsmsft-WorkspaceDefaultSqlServer'"
 		},
+		"keyVaultLinkedservice_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "@{concat('https://',linkedService().keyVaultName,'.vault.azure.net/')}"
+		},
 		"sourceBlobLinkedservice_sasUri": {
 			"type": "secureString",
 			"metadata": "Secure string for 'sasUri' of 'sourceBlobLinkedservice'"
@@ -22,10 +26,6 @@
 		"synapsewsmsft-WorkspaceDefaultStorage_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://adlsmsft.dfs.core.windows.net"
-		},
-		"keyVaultLinkedservice_properties_typeProperties_baseUrl": {
-			"type": "string",
-			"defaultValue": "https://kvmsft.vault.azure.net/"
 		}
 	},
 	"variables": {
@@ -215,7 +215,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/taxi_yellowtrip_pipeline')]",
+			"name": "[concat(parameters('workspaceName'), '/yellowTaxi_tripdata_pipeline')]",
 			"type": "Microsoft.Synapse/workspaces/pipelines",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
@@ -235,16 +235,35 @@
 						"userProperties": [],
 						"typeProperties": {
 							"source": {
-								"type": "SqlPoolSource",
+								"type": "SqlDWSource",
 								"sqlReaderQuery": {
 									"value": "IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = '@{pipeline().parameters.SchemaName}')\nBEGIN\nEXEC('CREATE SCHEMA @{pipeline().parameters.SchemaName}')\nselect Count(*) from sys.symmetric_keys;\nEND\nELSE\nBEGIN\n    select Count(*) from sys.symmetric_keys;\nEND",
 									"type": "Expression"
-								}
+								},
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
 							},
 							"dataset": {
-								"referenceName": "sqlPoolSchema",
+								"referenceName": "createSchemaDataset",
 								"type": "DatasetReference",
-								"parameters": {}
+								"parameters": {
+									"SynapseWorkspaceName": {
+										"value": "@pipeline().parameters.SynapseWorkspaceName",
+										"type": "Expression"
+									},
+									"SQLDedicatedPoolName": {
+										"value": "@pipeline().parameters.SQLDedicatedPoolName",
+										"type": "Expression"
+									},
+									"SQLLoginUsername": {
+										"value": "@pipeline().parameters.SchemaName",
+										"type": "Expression"
+									},
+									"keyVaultName": {
+										"value": "@pipeline().parameters.KeyVaultName",
+										"type": "Expression"
+									}
+								}
 							},
 							"firstRowOnly": false
 						}
@@ -293,8 +312,8 @@
 											"value": "@pipeline().parameters.SQLLoginUsername",
 											"type": "Expression"
 										},
-										"SQLLoginPassword": {
-											"value": "@pipeline().parameters.SQLLoginPassword",
+										"keyVaultName": {
+											"value": "@pipeline().parameters.KeyVaultName",
 											"type": "Expression"
 										}
 									}
@@ -332,15 +351,15 @@
 						"type": "string",
 						"defaultValue": "osama"
 					},
-					"SQLLoginPassword": {
+					"KeyVaultName": {
 						"type": "string",
-						"defaultValue": "abcd@1234"
+						"defaultValue": "kvmsft"
 					}
 				},
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('workspaceId'), '/datasets/sqlPoolSchema')]",
+				"[concat(variables('workspaceId'), '/datasets/createSchemaDataset')]",
 				"[concat(variables('workspaceId'), '/dataflows/blobToSynapseDataflow')]",
 				"[concat(variables('workspaceId'), '/linkedServices/synapsewsmsft-WorkspaceDefaultStorage')]",
 				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
@@ -367,8 +386,8 @@
 							"value": "@dataset().SQLLoginUsername",
 							"type": "Expression"
 						},
-						"SQLLoginPassword": {
-							"value": "@dataset().SQLLoginPassword",
+						"keyVaultName": {
+							"value": "@dataset().keyVaultName",
 							"type": "Expression"
 						}
 					}
@@ -386,7 +405,7 @@
 					"SQLLoginUsername": {
 						"type": "string"
 					},
-					"SQLLoginPassword": {
+					"keyVaultName": {
 						"type": "string"
 					}
 				},
@@ -398,7 +417,7 @@
 						"value": "@dataset().SchemaName",
 						"type": "Expression"
 					},
-					"table": "taxiYellowTrip"
+					"table": "tripData"
 				}
 			},
 			"dependsOn": [
@@ -452,6 +471,24 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/keyVaultLinkedservice')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"parameters": {
+					"keyVaultName": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "AzureKeyVault",
+				"typeProperties": {
+					"baseUrl": "[parameters('keyVaultLinkedservice_properties_typeProperties_baseUrl')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/sinkSynapseLinkedservice')]",
 			"type": "Microsoft.Synapse/workspaces/linkedServices",
 			"apiVersion": "2019-06-01-preview",
@@ -466,14 +503,28 @@
 					"SQLLoginUsername": {
 						"type": "String"
 					},
-					"SQLLoginPassword": {
-						"type": "String"
+					"keyVaultName": {
+						"type": "string"
 					}
 				},
 				"annotations": [],
 				"type": "AzureSqlDW",
 				"typeProperties": {
-					"connectionString": "[parameters('sinkSynapseLinkedservice_connectionString')]"
+					"connectionString": "[parameters('sinkSynapseLinkedservice_connectionString')]",
+					"password": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "keyVaultLinkedservice",
+							"type": "LinkedServiceReference",
+							"parameters": {
+								"keyVaultName": {
+									"value": "@linkedService().keyVaultName",
+									"type": "Expression"
+								}
+							}
+						},
+						"secretName": "synapseSqlLoginPassword"
+					}
 				},
 				"connectVia": {
 					"referenceName": "AutoResolveIntegrationRuntime",
@@ -481,7 +532,8 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
+				"[concat(variables('workspaceId'), '/linkedServices/keyVaultLinkedservice')]"
 			]
 		},
 		{
@@ -650,17 +702,54 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/keyVaultLinkedservice')]",
-			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"name": "[concat(parameters('workspaceName'), '/createSchemaDataset')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
+				"linkedServiceName": {
+					"referenceName": "sinkSynapseLinkedservice",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"SynapseWorkspaceName": {
+							"value": "@dataset().SynapseWorkspaceName",
+							"type": "Expression"
+						},
+						"SQLDedicatedPoolName": {
+							"value": "@dataset().SQLDedicatedPoolName",
+							"type": "Expression"
+						},
+						"SQLLoginUsername": {
+							"value": "@dataset().SQLLoginUsername",
+							"type": "Expression"
+						},
+						"keyVaultName": {
+							"value": "@dataset().keyVaultName",
+							"type": "Expression"
+						}
+					}
+				},
+				"parameters": {
+					"SynapseWorkspaceName": {
+						"type": "string"
+					},
+					"SQLDedicatedPoolName": {
+						"type": "string"
+					},
+					"SQLLoginUsername": {
+						"type": "string"
+					},
+					"keyVaultName": {
+						"type": "string"
+					}
+				},
 				"annotations": [],
-				"type": "AzureKeyVault",
-				"typeProperties": {
-					"baseUrl": "[parameters('keyVaultLinkedservice_properties_typeProperties_baseUrl')]"
-				}
+				"type": "AzureSqlDWTable",
+				"schema": [],
+				"typeProperties": {}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/sinkSynapseLinkedservice')]"
+			]
 		}
 	]
 }
