@@ -115,7 +115,8 @@
 				"defaultValue": "kvmsft"
 			},
 			"stagingContainer": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "filesystemmsft/polyBaseStage"
 			}
 		},
 		"annotations": []
