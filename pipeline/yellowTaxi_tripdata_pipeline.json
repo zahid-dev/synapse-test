@@ -29,10 +29,6 @@
 						"referenceName": "createSchemaDataset",
 						"type": "DatasetReference",
 						"parameters": {
-							"SchemaName": {
-								"value": "@pipeline().parameters.SchemaName",
-								"type": "Expression"
-							},
 							"SynapseWorkspaceName": {
 								"value": "@pipeline().parameters.SynapseWorkspaceName",
 								"type": "Expression"

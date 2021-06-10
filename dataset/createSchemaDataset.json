@@ -24,9 +24,6 @@
 			}
 		},
 		"parameters": {
-			"SchemaName": {
-				"type": "string"
-			},
 			"SynapseWorkspaceName": {
 				"type": "string"
 			},
