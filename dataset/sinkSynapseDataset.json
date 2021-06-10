@@ -5,20 +5,20 @@
 			"referenceName": "sinkSynapseLinkedservice",
 			"type": "LinkedServiceReference",
 			"parameters": {
-				"Synapse Workspace Name": {
-					"value": "@dataset().Synapse Workspace Name",
+				"SynapseWorkspaceName": {
+					"value": "@dataset().SynapseWorkspaceName",
 					"type": "Expression"
 				},
-				"SQL Dedicated Pool Name": {
-					"value": "@dataset().SQL Dedicated Pool Name",
+				"SQLDedicatedPoolName": {
+					"value": "@dataset().SQLDedicatedPoolName",
 					"type": "Expression"
 				},
-				"SQL Login Username": {
-					"value": "@dataset().SQL Login Username",
+				"SQLLoginUsername": {
+					"value": "@dataset().SQLLoginUsername",
 					"type": "Expression"
 				},
-				"SQL Login Psssword": {
-					"value": "@dataset().SQL Login Password",
+				"SQLLoginPassword": {
+					"value": "@dataset().SQLLoginPassword",
 					"type": "Expression"
 				}
 			}
@@ -27,16 +27,16 @@
 			"SchemaName": {
 				"type": "string"
 			},
-			"Synapse Workspace Name": {
+			"SynapseWorkspaceName": {
 				"type": "string"
 			},
-			"SQL Dedicated Pool Name": {
+			"SQLDedicatedPoolName": {
 				"type": "string"
 			},
-			"SQL Login Username": {
+			"SQLLoginUsername": {
 				"type": "string"
 			},
-			"SQL Login Password": {
+			"SQLLoginPassword": {
 				"type": "string"
 			}
 		},
