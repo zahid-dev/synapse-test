@@ -1,5 +1,5 @@
 {
-	"name": "taxi_yellowtrip_pipeline",
+	"name": "yellowTaxi_tripdata_pipeline",
 	"properties": {
 		"activities": [
 			{

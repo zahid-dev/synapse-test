@@ -48,7 +48,7 @@
 				"value": "@dataset().SchemaName",
 				"type": "Expression"
 			},
-			"table": "taxiYellowTrip"
+			"table": "tripData"
 		}
 	}
 }
