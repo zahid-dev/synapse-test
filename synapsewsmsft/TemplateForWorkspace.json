@@ -280,6 +280,22 @@
 										"SchemaName": {
 											"value": "@pipeline().parameters.SchemaName",
 											"type": "Expression"
+										},
+										"Synapse Workspace Name": {
+											"value": "@pipeline().parameters.Synapse Workspace Name",
+											"type": "Expression"
+										},
+										"SQL Dedicated Pool Name": {
+											"value": "@pipeline().parameters.SQL Dedicated Pool Name",
+											"type": "Expression"
+										},
+										"SQL Login Username": {
+											"value": "@pipeline().parameters.SQL Login Username",
+											"type": "Expression"
+										},
+										"SQL Login Password": {
+											"value": "@pipeline().parameters.SQL Login Password",
+											"type": "Expression"
 										}
 									}
 								}
@@ -334,10 +350,39 @@
 				"linkedServiceName": {
 					"referenceName": "sinkSynapseLinkedservice",
 					"type": "LinkedServiceReference",
-					"parameters": {}
+					"parameters": {
+						"Synapse Workspace Name": {
+							"value": "@dataset().Synapse Workspace Name",
+							"type": "Expression"
+						},
+						"SQL Dedicated Pool Name": {
+							"value": "@dataset().SQL Dedicated Pool Name",
+							"type": "Expression"
+						},
+						"SQL Login Username": {
+							"value": "@dataset().SQL Login Username",
+							"type": "Expression"
+						},
+						"SQL Login Psssword": {
+							"value": "@dataset().SQL Login Password",
+							"type": "Expression"
+						}
+					}
 				},
 				"parameters": {
 					"SchemaName": {
+						"type": "string"
+					},
+					"Synapse Workspace Name": {
+						"type": "string"
+					},
+					"SQL Dedicated Pool Name": {
+						"type": "string"
+					},
+					"SQL Login Username": {
+						"type": "string"
+					},
+					"SQL Login Password": {
 						"type": "string"
 					}
 				},
