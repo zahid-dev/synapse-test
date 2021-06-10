@@ -110,10 +110,6 @@
 			"SQLLoginUsername": {
 				"type": "string",
 				"defaultValue": "osama"
-			},
-			"SQLLoginPassword": {
-				"type": "string",
-				"defaultValue": "abcd@1234"
 			}
 		},
 		"annotations": []

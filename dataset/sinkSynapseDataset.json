@@ -35,9 +35,6 @@
 			},
 			"SQLLoginUsername": {
 				"type": "string"
-			},
-			"SQLLoginPassword": {
-				"type": "string"
 			}
 		},
 		"annotations": [],
