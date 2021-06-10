@@ -11,8 +11,7 @@
 			"location": {
 				"type": "AzureBlobStorageLocation",
 				"fileName": "yellow_tripdata_2016-07.csv",
-				"folderPath": "taxi",
-				"container": "csv"
+				"container": "taxi"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
