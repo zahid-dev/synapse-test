@@ -3,24 +3,24 @@
 	"type": "Microsoft.Synapse/workspaces/linkedservices",
 	"properties": {
 		"parameters": {
-			"Synapse Workspace Name": {
+			"SynapseWorkspaceName": {
 				"type": "String",
 				"defaultValue": "synapsewsmsft"
 			},
-			"SQL Dedicated Pool Name": {
+			"SQLDedicatedPoolName": {
 				"type": "String"
 			},
-			"SQL Login Username": {
+			"SQLLoginUsername": {
 				"type": "String"
 			},
-			"SQL Login Psssword": {
+			"SQLLoginPsssword": {
 				"type": "String"
 			}
 		},
 		"annotations": [],
 		"type": "AzureSqlDW",
 		"typeProperties": {
-			"connectionString": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=\"@{concat(linkedService().Synapse Workspace Name,'.sql.azuresynapse.net')}\";Initial Catalog=\"@{linkedService().SQL Dedicated Pool Name}\";User ID=\"@{linkedService().SQL Login Username}\";Password=\"@{linkedService().SQL Login Psssword}\""
+			"connectionString": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=\"@{concat(linkedService().SynapseWorkspaceName,'.sql.azuresynapse.net')}\";Initial Catalog=@{linkedService().SQLDedicatedPoolName};User ID=@{linkedService().SQLLoginUsername};Password=@{linkedService().SQLLoginPsssword}"
 		},
 		"connectVia": {
 			"referenceName": "AutoResolveIntegrationRuntime",
