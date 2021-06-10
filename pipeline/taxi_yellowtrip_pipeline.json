@@ -71,6 +71,10 @@
 								"SQLLoginUsername": {
 									"value": "@pipeline().parameters.SQLLoginUsername",
 									"type": "Expression"
+								},
+								"keyVaultName": {
+									"value": "@pipeline().parameters.KeyVaultName",
+									"type": "Expression"
 								}
 							}
 						}
