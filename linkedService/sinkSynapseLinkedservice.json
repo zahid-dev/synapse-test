@@ -1,0 +1,42 @@
+{
+	"name": "sinkSynapseLinkedservice",
+	"properties": {
+		"parameters": {
+			"SynapseWorkspaceName": {
+				"type": "string"
+			},
+			"SQLDedicatedPoolName": {
+				"type": "string"
+			},
+			"SQLLoginUsername": {
+				"type": "string"
+			},
+			"keyVaultName": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlDW",
+		"typeProperties": {
+			"connectionString": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=\"@{concat(linkedService().SynapseWorkspaceName,'.database.windows.net')}\";Initial Catalog=@{linkedService().SQLDedicatedPoolName};User ID=@{linkedService().SQLLoginUsername}",
+			"password": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "keyVaultLinkedservice",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"keyVaultName": {
+							"value": "@linkedService().keyVaultName",
+							"type": "Expression"
+						}
+					}
+				},
+				"secretName": "synapseSqlLoginPassword"
+			}
+		},
+		"connectVia": {
+			"referenceName": "AutoResolveIntegrationRuntime",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}
