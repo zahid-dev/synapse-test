@@ -318,16 +318,19 @@
 				"parameters": {
 					"SchemaName": {
 						"type": "string",
-						"defaultValue": "dbo"
+						"defaultValue": "yellowTaxi"
 					},
 					"SynapseWorkspaceName": {
-						"type": "string"
+						"type": "string",
+						"defaultValue": "synapsewsmsft"
 					},
 					"SQLDedicatedPoolName": {
-						"type": "string"
+						"type": "string",
+						"defaultValue": "sqlpoolmsft"
 					},
 					"SQLLoginUsername": {
-						"type": "string"
+						"type": "string",
+						"defaultValue": "osama"
 					},
 					"SQLLoginPassword": {
 						"type": "securestring"
