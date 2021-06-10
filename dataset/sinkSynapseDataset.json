@@ -16,10 +16,6 @@
 				"SQLLoginUsername": {
 					"value": "@dataset().SQLLoginUsername",
 					"type": "Expression"
-				},
-				"SQLLoginPassword": {
-					"value": "@dataset().SQLLoginPassword",
-					"type": "Expression"
 				}
 			}
 		},

@@ -71,10 +71,6 @@
 								"SQLLoginUsername": {
 									"value": "@pipeline().parameters.SQLLoginUsername",
 									"type": "Expression"
-								},
-								"SQLLoginPassword": {
-									"value": "@pipeline().parameters.SQLLoginPassword",
-									"type": "Expression"
 								}
 							}
 						}
@@ -110,6 +106,10 @@
 			"SQLLoginUsername": {
 				"type": "string",
 				"defaultValue": "osama"
+			},
+			"KeyVaultName": {
+				"type": "string",
+				"defaultValue": "kvmsft"
 			}
 		},
 		"annotations": []
