@@ -15,10 +15,6 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'synapsewsmsft-WorkspaceDefaultSqlServer'"
 		},
-		"nyc_tlc_yellow_sasUri": {
-			"type": "secureString",
-			"metadata": "Secure string for 'sasUri' of 'nyc_tlc_yellow'"
-		},
 		"sourceBlobLinkedservice_sasUri": {
 			"type": "secureString",
 			"metadata": "Secure string for 'sasUri' of 'sourceBlobLinkedservice'"
@@ -26,6 +22,10 @@
 		"synapsewsmsft-WorkspaceDefaultStorage_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://adlsmsft.dfs.core.windows.net"
+		},
+		"keyVaultLinkedservice_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://kvmsft.vault.azure.net/"
 		}
 	},
 	"variables": {
@@ -452,19 +452,6 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/nyc_tlc_yellow')]",
-			"type": "Microsoft.Synapse/workspaces/linkedServices",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobStorage",
-				"typeProperties": {
-					"sasUri": "[parameters('nyc_tlc_yellow_sasUri')]"
-				}
-			},
-			"dependsOn": []
-		},
-		{
 			"name": "[concat(parameters('workspaceName'), '/sinkSynapseLinkedservice')]",
 			"type": "Microsoft.Synapse/workspaces/linkedServices",
 			"apiVersion": "2019-06-01-preview",
@@ -480,8 +467,7 @@
 						"type": "String"
 					},
 					"SQLLoginPassword": {
-						"type": "String",
-						"defaultValue": "abcd@1234"
+						"type": "String"
 					}
 				},
 				"annotations": [],
@@ -661,6 +647,19 @@
 			"type": "Microsoft.Synapse/workspaces/managedVirtualNetworks",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/keyVaultLinkedservice')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureKeyVault",
+				"typeProperties": {
+					"baseUrl": "[parameters('keyVaultLinkedservice_properties_typeProperties_baseUrl')]"
+				}
+			},
 			"dependsOn": []
 		}
 	]

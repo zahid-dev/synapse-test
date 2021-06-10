@@ -11,14 +11,14 @@
 		"synapsewsmsft-WorkspaceDefaultSqlServer_connectionString": {
 			"value": ""
 		},
-		"nyc_tlc_yellow_sasUri": {
-			"value": ""
-		},
 		"sourceBlobLinkedservice_sasUri": {
 			"value": ""
 		},
 		"synapsewsmsft-WorkspaceDefaultStorage_properties_typeProperties_url": {
 			"value": "https://adlsmsft.dfs.core.windows.net"
+		},
+		"keyVaultLinkedservice_properties_typeProperties_baseUrl": {
+			"value": "https://kvmsft.vault.azure.net/"
 		}
 	}
 }
