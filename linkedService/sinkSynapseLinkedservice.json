@@ -21,7 +21,7 @@
 		"annotations": [],
 		"type": "AzureSqlDW",
 		"typeProperties": {
-			"connectionString": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=\"@{concat(linkedService().SynapseWorkspaceName,'.database.windows.net')}\";Initial Catalog=@{linkedService().SQLDedicatedPoolName};User ID=@{linkedService().SQLLoginUsername}",
+			"connectionString": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=@{concat(linkedService().SynapseWorkspaceName,linkedService().synapseWorkspaceFqdn)};Initial Catalog=@{linkedService().SQLDedicatedPoolName};User ID=@{linkedService().SQLLoginUsername}",
 			"password": {
 				"type": "AzureKeyVaultSecret",
 				"store": {
