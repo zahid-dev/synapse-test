@@ -5,13 +5,13 @@
 		"workspaceName": {
 			"value": "synapsewsmsft"
 		},
-		"synapsewsmsft-WorkspaceDefaultSqlServer_connectionString": {
+		"AzureSynapseAnalytics1_connectionString": {
 			"value": ""
 		},
 		"sinkSynapseLinkedservice_connectionString": {
 			"value": ""
 		},
-		"AzureSynapseAnalytics1_connectionString": {
+		"synapsewsmsft-WorkspaceDefaultSqlServer_connectionString": {
 			"value": ""
 		},
 		"keyVaultLinkedservice_properties_typeProperties_baseUrl": {
