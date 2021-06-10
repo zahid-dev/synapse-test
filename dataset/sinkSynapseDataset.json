@@ -20,10 +20,6 @@
 				"keyVaultName": {
 					"value": "@dataset().keyVaultName",
 					"type": "Expression"
-				},
-				"synapseWorkspaceFqdn": {
-					"value": "@dataset().synapseWorkspaceFqdn",
-					"type": "Expression"
 				}
 			}
 		},
@@ -41,9 +37,6 @@
 				"type": "string"
 			},
 			"keyVaultName": {
-				"type": "string"
-			},
-			"synapseWorkspaceFqdn": {
 				"type": "string"
 			}
 		},
