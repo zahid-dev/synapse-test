@@ -1,0 +1,15 @@
+{
+	"name": "keyVaultLinkedservice",
+	"properties": {
+		"parameters": {
+			"keyVaultName": {
+				"type": "String"
+			}
+		},
+		"annotations": [],
+		"type": "AzureKeyVault",
+		"typeProperties": {
+			"baseUrl": "https://kvmsft.vault.azure.net/"
+		}
+	}
+}
