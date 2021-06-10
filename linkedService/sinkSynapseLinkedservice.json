@@ -12,14 +12,14 @@
 			"SQLLoginUsername": {
 				"type": "String"
 			},
-			"SQLLoginPsssword": {
+			"SQLLoginPassword": {
 				"type": "String"
 			}
 		},
 		"annotations": [],
 		"type": "AzureSqlDW",
 		"typeProperties": {
-			"connectionString": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=\"@{concat(linkedService().SynapseWorkspaceName,'.sql.azuresynapse.net')}\";Initial Catalog=@{linkedService().SQLDedicatedPoolName};User ID=@{linkedService().SQLLoginUsername};Password=@{linkedService().SQLLoginPsssword}"
+			"connectionString": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=\"@{concat(linkedService().SynapseWorkspaceName,'.sql.azuresynapse.net')}\";Initial Catalog=@{linkedService().SQLDedicatedPoolName};User ID=@{linkedService().SQLLoginUsername};Password=@{linkedService().SQLLoginPassword}"
 		},
 		"connectVia": {
 			"referenceName": "AutoResolveIntegrationRuntime",
