@@ -81,7 +81,7 @@
 									"type": "Expression"
 								},
 								"SynapseWorkspaceName": {
-									"value": "@concat(pipeline().parameters.SynapseWorkspaceName,variables('synapseWorkspaceFqdn'))",
+									"value": "@pipeline().parameters.SynapseWorkspaceName",
 									"type": "Expression"
 								},
 								"SQLDedicatedPoolName": {
@@ -104,7 +104,10 @@
 							"referenceName": "synapsewsmsft-WorkspaceDefaultStorage",
 							"type": "LinkedServiceReference"
 						},
-						"folderPath": "filesystemmsft/polyBaseStage"
+						"folderPath": {
+							"value": "@concat(pipeline().parameters.stagingContainer,'/polyBaseStaging')",
+							"type": "Expression"
+						}
 					},
 					"compute": {
 						"coreCount": 8,
@@ -121,7 +124,7 @@
 			},
 			"SynapseWorkspaceName": {
 				"type": "string",
-				"defaultValue": "synapsewsmsft"
+				"defaultValue": "synapsewsmsft.database.windows.net"
 			},
 			"SQLDedicatedPoolName": {
 				"type": "string",
@@ -134,12 +137,10 @@
 			"KeyVaultName": {
 				"type": "string",
 				"defaultValue": "kvmsft"
-			}
-		},
-		"variables": {
-			"synapseWorkspaceFqdn": {
-				"type": "String",
-				"defaultValue": ".database.windows.net"
+			},
+			"stagingContainer": {
+				"type": "string",
+				"defaultValue": "filesystemmsft"
 			}
 		},
 		"annotations": []
