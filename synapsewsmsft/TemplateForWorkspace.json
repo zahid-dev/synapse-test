@@ -844,7 +844,10 @@
 									"referenceName": "synapsewsmsft-WorkspaceDefaultStorage",
 									"type": "LinkedServiceReference"
 								},
-								"folderPath": "filesystemmsft/polyBaseStage"
+								"folderPath": {
+									"value": "@pipeline().parameters.stagingContainer",
+									"type": "Expression"
+								}
 							},
 							"compute": {
 								"coreCount": 8,
@@ -874,6 +877,10 @@
 					"keyVaultName": {
 						"type": "string",
 						"defaultValue": "kvmsft"
+					},
+					"stagingContainer": {
+						"type": "string",
+						"defaultValue": "filesystemmsft/polyBaseStage"
 					}
 				},
 				"annotations": []
@@ -955,7 +962,18 @@
 				"annotations": [],
 				"type": "AzureSqlDW",
 				"typeProperties": {
-					"connectionString": "[parameters('AzureSynapseAnalytics1_connectionString')]"
+					"connectionString": "[parameters('AzureSynapseAnalytics1_connectionString')]",
+					"password": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "keyVaultLinkedservice",
+							"type": "LinkedServiceReference",
+							"parameters": {
+								"keyVaultName": "kvmsft"
+							}
+						},
+						"secretName": "synapseSqlLoginPassword"
+					}
 				},
 				"connectVia": {
 					"referenceName": "AutoResolveIntegrationRuntime",
@@ -963,7 +981,8 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
+				"[concat(variables('workspaceId'), '/linkedServices/keyVaultLinkedservice')]"
 			]
 		},
 		{
