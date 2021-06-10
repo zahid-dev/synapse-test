@@ -18,7 +18,7 @@
 		"annotations": [],
 		"type": "AzureSqlDW",
 		"typeProperties": {
-			"connectionString": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=synapsewsmsft.database.windows.net;Initial Catalog=sqlpoolmsft;User ID=@{linkedService().SQLLoginUsername}",
+			"connectionString": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=synapsewsmsft.database.windows.net;Initial Catalog=@{linkedService().SQLDedicatedPoolName};User ID=@{linkedService().SQLLoginUsername}",
 			"password": {
 				"type": "AzureKeyVaultSecret",
 				"store": {
