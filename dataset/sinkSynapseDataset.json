@@ -38,6 +38,9 @@
 			},
 			"keyVaultName": {
 				"type": "string"
+			},
+			"synapseWorkspaceFqdn": {
+				"type": "string"
 			}
 		},
 		"annotations": [],
