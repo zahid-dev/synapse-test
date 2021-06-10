@@ -112,7 +112,8 @@
 				"defaultValue": "osama"
 			},
 			"SQLLoginPassword": {
-				"type": "securestring"
+				"type": "string",
+				"defaultValue": "abcd@1234"
 			}
 		},
 		"annotations": []
