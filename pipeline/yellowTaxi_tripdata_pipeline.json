@@ -95,6 +95,10 @@
 								"keyVaultName": {
 									"value": "@pipeline().parameters.KeyVaultName",
 									"type": "Expression"
+								},
+								"synapseWorkspaceFqdn": {
+									"value": "@variables('synapseWorkspaceFqdn')",
+									"type": "Expression"
 								}
 							}
 						}
@@ -134,6 +138,12 @@
 			"KeyVaultName": {
 				"type": "string",
 				"defaultValue": "kvmsft"
+			}
+		},
+		"variables": {
+			"synapseWorkspaceFqdn": {
+				"type": "String",
+				"defaultValue": ".database.windows.net"
 			}
 		},
 		"annotations": []
