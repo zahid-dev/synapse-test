@@ -13,9 +13,6 @@
 			},
 			"keyVaultName": {
 				"type": "string"
-			},
-			"nnn": {
-				"type": "string"
 			}
 		},
 		"annotations": [],
