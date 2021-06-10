@@ -10,6 +10,9 @@
 			},
 			"SQLLoginUsername": {
 				"type": "String"
+			},
+			"keyVaultName": {
+				"type": "string"
 			}
 		},
 		"annotations": [],
@@ -20,7 +23,13 @@
 				"type": "AzureKeyVaultSecret",
 				"store": {
 					"referenceName": "keyVaultLinkedservice",
-					"type": "LinkedServiceReference"
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"keyVaultName": {
+							"value": "@linkedService().keyVaultName",
+							"type": "Expression"
+						}
+					}
 				},
 				"secretName": "synapseSqlLoginPassword"
 			}
