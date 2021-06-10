@@ -11,6 +11,9 @@
 		"sinkSynapseLinkedservice_connectionString": {
 			"value": ""
 		},
+		"AzureSynapseAnalytics1_connectionString": {
+			"value": ""
+		},
 		"keyVaultLinkedservice_properties_typeProperties_baseUrl": {
 			"value": "@{concat('https://',linkedService().keyVaultName,'.vault.azure.net/')}"
 		},
