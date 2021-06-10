@@ -5,17 +5,20 @@
 		"workspaceName": {
 			"value": "synapsewsmsft"
 		},
+		"sinkSynapseLinkedservice_connectionString": {
+			"value": ""
+		},
 		"synapsewsmsft-WorkspaceDefaultSqlServer_connectionString": {
 			"value": ""
 		},
-		"sinkSynapseLinkedservice_connectionString": {
+		"nyc_tlc_yellow_sasUri": {
+			"value": ""
+		},
+		"sourceBlobLinkedservice_sasUri": {
 			"value": ""
 		},
 		"synapsewsmsft-WorkspaceDefaultStorage_properties_typeProperties_url": {
 			"value": "https://adlsmsft.dfs.core.windows.net"
-		},
-		"sourceBlobLinkedservice_sasUri": {
-			"value": ""
 		}
 	}
 }
