@@ -13,8 +13,7 @@
 				"type": "String"
 			},
 			"SQLLoginPassword": {
-				"type": "String",
-				"defaultValue": "abcd@1234"
+				"type": "String"
 			}
 		},
 		"annotations": [],
