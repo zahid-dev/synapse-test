@@ -99,16 +99,16 @@
 				"type": "string",
 				"defaultValue": "dbo"
 			},
-			"Synapse Workspace Name": {
+			"SynapseWorkspaceName": {
 				"type": "string"
 			},
-			"SQL Dedicated Pool Name": {
+			"SQLDedicatedPoolName": {
 				"type": "string"
 			},
-			"SQL Login Username": {
+			"SQLLoginUsername": {
 				"type": "string"
 			},
-			"SQL Login Password": {
+			"SQLLoginPassword": {
 				"type": "securestring"
 			}
 		},
