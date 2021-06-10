@@ -17,7 +17,7 @@
 					"value": "@dataset().SQLLoginUsername",
 					"type": "Expression"
 				},
-				"SQLLoginPassword": {
+				"keyVaultName": {
 					"value": "@dataset().keyVaultName",
 					"type": "Expression"
 				}
