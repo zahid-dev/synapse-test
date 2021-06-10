@@ -80,7 +80,10 @@
 							"referenceName": "synapsewsmsft-WorkspaceDefaultStorage",
 							"type": "LinkedServiceReference"
 						},
-						"folderPath": "filesystemmsft/polyBaseStage"
+						"folderPath": {
+							"value": "@pipeline().parameters.stagingContainer",
+							"type": "Expression"
+						}
 					},
 					"compute": {
 						"coreCount": 8,
@@ -110,6 +113,9 @@
 			"keyVaultName": {
 				"type": "string",
 				"defaultValue": "kvmsft"
+			},
+			"stagingContainer": {
+				"type": "string"
 			}
 		},
 		"annotations": []
