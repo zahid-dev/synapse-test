@@ -61,19 +61,19 @@
 									"type": "Expression"
 								},
 								"SynapseWorkspaceName": {
-									"value": "@pipeline().parameters.Synapse Workspace Name",
+									"value": "@pipeline().parameters.SynapseWorkspaceName",
 									"type": "Expression"
 								},
 								"SQLDedicatedPoolName": {
-									"value": "@pipeline().parameters.SQL Dedicated Pool Name",
+									"value": "@pipeline().parameters.SQLDedicatedPoolName",
 									"type": "Expression"
 								},
 								"SQLLoginUsername": {
-									"value": "@pipeline().parameters.SQL Login Username",
+									"value": "@pipeline().parameters.SQLLoginUsername",
 									"type": "Expression"
 								},
 								"SQLLoginPassword": {
-									"value": "@pipeline().parameters.SQL Login Password",
+									"value": "@pipeline().parameters.SQLLoginPassword",
 									"type": "Expression"
 								}
 							}
