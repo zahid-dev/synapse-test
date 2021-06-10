@@ -26,7 +26,7 @@
 					"type": "LinkedServiceReference",
 					"parameters": {
 						"keyVaultName": {
-							"value": "@linkedService().keyVaultName",
+							"value": "@{linkedService().keyVaultName}",
 							"type": "Expression"
 						}
 					}
