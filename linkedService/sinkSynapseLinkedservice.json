@@ -4,8 +4,7 @@
 	"properties": {
 		"parameters": {
 			"SynapseWorkspaceName": {
-				"type": "String",
-				"defaultValue": "synapsewsmsft"
+				"type": "String"
 			},
 			"SQLDedicatedPoolName": {
 				"type": "String"
