@@ -256,7 +256,7 @@
 										"type": "Expression"
 									},
 									"SQLLoginUsername": {
-										"value": "@pipeline().parameters.SchemaName",
+										"value": "@pipeline().parameters.SQLLoginUsername",
 										"type": "Expression"
 									},
 									"keyVaultName": {
