@@ -1,0 +1,32 @@
+{
+	"name": "polyBaseStagingLinkedservice",
+	"properties": {
+		"parameters": {
+			"keyVaultName": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "AzureBlobStorage",
+		"typeProperties": {
+			"connectionString": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "keyVaultLinkedservice",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"keyVaultName": {
+							"value": "@linkedService().keyVaultName",
+							"type": "Expression"
+						}
+					}
+				},
+				"secretName": "adlsConnectionString"
+			}
+		},
+		"connectVia": {
+			"referenceName": "AutoResolveIntegrationRuntime",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}
