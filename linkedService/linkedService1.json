@@ -1,0 +1,34 @@
+{
+	"name": "linkedService1",
+	"properties": {
+		"parameters": {
+			"keyVaultName": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "AzureBlobFS",
+		"typeProperties": {
+			"url": "https://adlsmsft.dfs.core.windows.net",
+			"accountKey": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "keyVaultLinkedservice",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"keyVaultName": {
+							"value": "@linkedService().keyVaultName",
+							"type": "Expression"
+						}
+					}
+				},
+				"secretName": "adlsConnectionString",
+				"secretVersion": "36b1410c0c7d4ef0816e562d7a5b9b5f"
+			}
+		},
+		"connectVia": {
+			"referenceName": "AutoResolveIntegrationRuntime",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}
