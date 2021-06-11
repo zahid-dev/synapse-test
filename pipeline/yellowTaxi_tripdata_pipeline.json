@@ -101,18 +101,8 @@
 					},
 					"staging": {
 						"linkedService": {
-							"referenceName": "polybaseStagingAdlsLinkedservice",
-							"type": "LinkedServiceReference",
-							"parameters": {
-								"keyVaultName": {
-									"value": "@pipeline().parameters.KeyVaultName",
-									"type": "Expression"
-								},
-								"datalakeAccountName": {
-									"value": "@pipeline().parameters.datalakeAccountName",
-									"type": "Expression"
-								}
-							}
+							"referenceName": "synapsewsmsft-WorkspaceDefaultStorage",
+							"type": "LinkedServiceReference"
 						},
 						"folderPath": {
 							"value": "@pipeline().parameters.stagingContainer",
