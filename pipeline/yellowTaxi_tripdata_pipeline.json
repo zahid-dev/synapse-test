@@ -101,7 +101,7 @@
 					},
 					"staging": {
 						"linkedService": {
-							"referenceName": "polyBaseStagingLinkedservice",
+							"referenceName": "linkedService1",
 							"type": "LinkedServiceReference",
 							"parameters": {
 								"keyVaultName": {
