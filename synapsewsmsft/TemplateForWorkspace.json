@@ -26,6 +26,10 @@
 		"synapsewsmsft-WorkspaceDefaultStorage_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://adlsmsft.dfs.core.windows.net"
+		},
+		"polybaseStagingAdlsLinkedservice_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "@{concat('https://',linkedService().datalakeAccountName,'.dfs.core.windows.net')}"
 		}
 	},
 	"variables": {
@@ -321,8 +325,18 @@
 							},
 							"staging": {
 								"linkedService": {
-									"referenceName": "synapsewsmsft-WorkspaceDefaultStorage",
-									"type": "LinkedServiceReference"
+									"referenceName": "polybaseStagingAdlsLinkedservice",
+									"type": "LinkedServiceReference",
+									"parameters": {
+										"keyVaultName": {
+											"value": "@pipeline().parameters.KeyVaultName",
+											"type": "Expression"
+										},
+										"datalakeAccountName": {
+											"value": "@pipeline().parameters.datalakeAccountName",
+											"type": "Expression"
+										}
+									}
 								},
 								"folderPath": {
 									"value": "@pipeline().parameters.stagingContainer",
@@ -372,7 +386,7 @@
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/datasets/createSchemaDataset')]",
 				"[concat(variables('workspaceId'), '/dataflows/blobToSynapseDataflow')]",
-				"[concat(variables('workspaceId'), '/linkedServices/synapsewsmsft-WorkspaceDefaultStorage')]",
+				"[concat(variables('workspaceId'), '/linkedServices/polybaseStagingAdlsLinkedservice')]",
 				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
 			]
 		},
@@ -761,6 +775,48 @@
 			"apiVersion": "2019-06-01-preview",
 			"properties": {},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/polybaseStagingAdlsLinkedservice')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"parameters": {
+					"keyVaultName": {
+						"type": "string"
+					},
+					"datalakeAccountName": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('polybaseStagingAdlsLinkedservice_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "keyVaultLinkedservice",
+							"type": "LinkedServiceReference",
+							"parameters": {
+								"keyVaultName": {
+									"value": "@linkedService().keyVaultName",
+									"type": "Expression"
+								}
+							}
+						},
+						"secretName": "adlsAccessKey"
+					}
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
+				"[concat(variables('workspaceId'), '/linkedServices/keyVaultLinkedservice')]"
+			]
 		}
 	]
 }

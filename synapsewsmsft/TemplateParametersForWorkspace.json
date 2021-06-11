@@ -19,6 +19,9 @@
 		},
 		"synapsewsmsft-WorkspaceDefaultStorage_properties_typeProperties_url": {
 			"value": "https://adlsmsft.dfs.core.windows.net"
+		},
+		"polybaseStagingAdlsLinkedservice_properties_typeProperties_url": {
+			"value": "@{concat('https://',linkedService().datalakeAccountName,'.dfs.core.windows.net')}"
 		}
 	}
 }
