@@ -100,20 +100,6 @@
 						}
 					},
 					"staging": {
-						"linkedService": {
-							"referenceName": "polybaseStagingAdlsLinkedservice",
-							"type": "LinkedServiceReference",
-							"parameters": {
-								"keyVaultName": {
-									"value": "@pipeline().parameters.KeyVaultName",
-									"type": "Expression"
-								},
-								"synapseDatalakeAccount": {
-									"value": "@pipeline().parameters.synapseDatalakeAccount",
-									"type": "Expression"
-								}
-							}
-						},
 						"folderPath": {
 							"value": "@pipeline().parameters.stagingContainer",
 							"type": "Expression"
