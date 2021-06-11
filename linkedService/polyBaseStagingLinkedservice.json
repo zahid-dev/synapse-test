@@ -4,9 +4,6 @@
 		"parameters": {
 			"keyVaultName": {
 				"type": "string"
-			},
-			"synapseDatalakeAccount": {
-				"type": "string"
 			}
 		},
 		"annotations": [],
