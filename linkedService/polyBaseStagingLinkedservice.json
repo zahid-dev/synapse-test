@@ -6,14 +6,14 @@
 			"keyVaultName": {
 				"type": "string"
 			},
-			"aaa": {
+			"synapseDatalakeAccount": {
 				"type": "string"
 			}
 		},
 		"annotations": [],
 		"type": "AzureBlobStorage",
 		"typeProperties": {
-			"connectionString": "DefaultEndpointsProtocol=https;AccountName=a;",
+			"connectionString": "DefaultEndpointsProtocol=https;AccountName=@{linkedService().synapseDatalakeAccount};",
 			"accountKey": {
 				"type": "AzureKeyVaultSecret",
 				"store": {
