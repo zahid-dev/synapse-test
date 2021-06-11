@@ -14,14 +14,14 @@
 		"keyVaultLinkedservice_properties_typeProperties_baseUrl": {
 			"value": "@{concat('https://',linkedService().keyVaultName,'.vault.azure.net/')}"
 		},
+		"polybaseStagingAdlsLinkedservice_properties_typeProperties_url": {
+			"value": "@{concat('https://',linkedService().datalakeAccountName,'.dfs.core.windows.net')}"
+		},
 		"sourceBlobLinkedservice_sasUri": {
 			"value": ""
 		},
 		"synapsewsmsft-WorkspaceDefaultStorage_properties_typeProperties_url": {
 			"value": "https://adlsmsft.dfs.core.windows.net"
-		},
-		"polybaseStagingAdlsLinkedservice_properties_typeProperties_url": {
-			"value": "@{concat('https://',linkedService().datalakeAccountName,'.dfs.core.windows.net')}"
 		}
 	}
 }
