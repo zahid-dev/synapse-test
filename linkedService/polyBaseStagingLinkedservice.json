@@ -1,6 +1,5 @@
 {
 	"name": "polyBaseStagingLinkedservice",
-	"type": "Microsoft.Synapse/workspaces/linkedservices",
 	"properties": {
 		"parameters": {
 			"keyVaultName": {
@@ -13,8 +12,7 @@
 		"annotations": [],
 		"type": "AzureBlobStorage",
 		"typeProperties": {
-			"connectionString": "DefaultEndpointsProtocol=https;AccountName=@{linkedService().synapseDatalakeAccount};",
-			"accountKey": {
+			"connectionString": {
 				"type": "AzureKeyVaultSecret",
 				"store": {
 					"referenceName": "keyVaultLinkedservice",
@@ -26,13 +24,13 @@
 						}
 					}
 				},
-				"secretName": "adlsConnectionString",
-				"secretVersion": "36b1410c0c7d4ef0816e562d7a5b9b5f"
+				"secretName": "adlsConnectionString"
 			}
 		},
 		"connectVia": {
 			"referenceName": "AutoResolveIntegrationRuntime",
 			"type": "IntegrationRuntimeReference"
 		}
-	}
+	},
+	"type": "Microsoft.Synapse/workspaces/linkedservices"
 }
