@@ -1,10 +1,15 @@
 {
 	"name": "linkedService1",
 	"properties": {
+		"parameters": {
+			"synapseDatalakeAccount": {
+				"type": "string"
+			}
+		},
 		"annotations": [],
 		"type": "AzureBlobFS",
 		"typeProperties": {
-			"url": "https://adlsmsft.dfs.core.windows.net"
+			"url": "@{concat('https://',linkedService().synapseDatalakeAccount,'.dfs.core.windows.net')}"
 		},
 		"connectVia": {
 			"referenceName": "AutoResolveIntegrationRuntime",
