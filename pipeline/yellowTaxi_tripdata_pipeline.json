@@ -101,11 +101,15 @@
 					},
 					"staging": {
 						"linkedService": {
-							"referenceName": "linkedService1",
+							"referenceName": "polybaseStagingAdlsLinkedservice",
 							"type": "LinkedServiceReference",
 							"parameters": {
 								"keyVaultName": {
 									"value": "@pipeline().parameters.KeyVaultName",
+									"type": "Expression"
+								},
+								"synapseDatalakeAccount": {
+									"value": "@pipeline().parameters.synapseDatalakeAccount",
 									"type": "Expression"
 								}
 							}
