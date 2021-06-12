@@ -140,11 +140,11 @@
 			},
 			"SynapseWorkspaceName": {
 				"type": "string",
-				"defaultValue": "dftxcvpocws1.database.windows.net"
+				"defaultValue": "synapsewsmsft.database.windows.net"
 			},
 			"SQLDedicatedPoolName": {
 				"type": "string",
-				"defaultValue": "dftxcvpocws1p1"
+				"defaultValue": "sqlpoolmsft"
 			},
 			"SQLLoginUsername": {
 				"type": "string",
@@ -152,15 +152,15 @@
 			},
 			"KeyVaultName": {
 				"type": "string",
-				"defaultValue": "asnmoth"
+				"defaultValue": "kvmsft"
 			},
 			"datalakeAccountName": {
 				"type": "string",
-				"defaultValue": "dlsdftxcvpoc"
+				"defaultValue": "adlsmsft"
 			},
 			"stagingContainer": {
 				"type": "string",
-				"defaultValue": "dlsdftxcvpocfs1"
+				"defaultValue": "filesystemmsft"
 			}
 		},
 		"annotations": []
