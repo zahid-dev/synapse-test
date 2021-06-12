@@ -10,7 +10,7 @@
 		"annotations": [],
 		"type": "AzureBlobStorage",
 		"typeProperties": {
-			"sasUri": "https://yellowtripdata.blob.core.windows.net/"
+			"sasUri": "@{linkedService().sourceBlobSasUri}"
 		},
 		"connectVia": {
 			"referenceName": "AutoResolveIntegrationRuntime",
