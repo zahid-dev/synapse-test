@@ -116,7 +116,12 @@
 								"type": "DataFlowReference",
 								"parameters": {},
 								"datasetParameters": {
-									"sourceBlob": {},
+									"sourceBlob": {
+										"sourceBlobSasUri": {
+											"value": "@variables('sourcsBlobSasUri')",
+											"type": "Expression"
+										}
+									},
 									"sinkSynapse": {
 										"SchemaName": {
 											"value": "@pipeline().parameters.SchemaName",
@@ -176,11 +181,11 @@
 					},
 					"SynapseWorkspaceName": {
 						"type": "string",
-						"defaultValue": "synapsewsmsft.database.windows.net"
+						"defaultValue": "dftxcvpocws1.database.windows.net"
 					},
 					"SQLDedicatedPoolName": {
 						"type": "string",
-						"defaultValue": "sqlpoolmsft"
+						"defaultValue": "dftxcvpocws1p1"
 					},
 					"SQLLoginUsername": {
 						"type": "string",
@@ -188,15 +193,21 @@
 					},
 					"KeyVaultName": {
 						"type": "string",
-						"defaultValue": "kvmsft"
+						"defaultValue": "asnmoth"
 					},
 					"datalakeAccountName": {
 						"type": "string",
-						"defaultValue": "adlsmsft"
+						"defaultValue": "dlsdftxcvpoc"
 					},
 					"stagingContainer": {
 						"type": "string",
-						"defaultValue": "filesystemmsft"
+						"defaultValue": "dlsdftxcvpocfs1"
+					}
+				},
+				"variables": {
+					"sourcsBlobSasUri": {
+						"type": "String",
+						"defaultValue": "https://yellowtripdata.blob.core.windows.net/?sv=2020-02-10&ss=bfqt&srt=sco&sp=rwdlacuptfx&se=2061-06-11T03:30:37Z&st=2021-06-10T19:30:37Z&spr=https&sig=BDYHEwS9J%2BTPthsyOcVJwY5gmFcexZI0rx00hnOt%2BCY%3D"
 					}
 				},
 				"annotations": []
@@ -204,7 +215,8 @@
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/datasets/createSchemaDataset')]",
 				"[concat(variables('workspaceId'), '/dataflows/blobToSynapseDataflow')]",
-				"[concat(variables('workspaceId'), '/linkedServices/polybaseStagingAdlsLinkedservice')]"
+				"[concat(variables('workspaceId'), '/linkedServices/polybaseStagingAdlsLinkedservice')]",
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
 			]
 		},
 		{
@@ -323,7 +335,18 @@
 			"properties": {
 				"linkedServiceName": {
 					"referenceName": "sourceBlobLinkedservice",
-					"type": "LinkedServiceReference"
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"sourceBlobSasUri": {
+							"value": "@dataset().sourceBlobSasUri",
+							"type": "Expression"
+						}
+					}
+				},
+				"parameters": {
+					"sourceBlobSasUri": {
+						"type": "string"
+					}
 				},
 				"annotations": [],
 				"type": "DelimitedText",
@@ -457,6 +480,11 @@
 			"type": "Microsoft.Synapse/workspaces/linkedServices",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
+				"parameters": {
+					"sourceBlobSasUri": {
+						"type": "string"
+					}
+				},
 				"annotations": [],
 				"type": "AzureBlobStorage",
 				"typeProperties": {
