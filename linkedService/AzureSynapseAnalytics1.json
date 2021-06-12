@@ -1,0 +1,25 @@
+{
+	"name": "AzureSynapseAnalytics1",
+	"properties": {
+		"annotations": [],
+		"type": "AzureSqlDW",
+		"typeProperties": {
+			"connectionString": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=dftxcvpocws1.database.windows.net;Initial Catalog=dftxcvpocws1p1;User ID=osama",
+			"password": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "keyVaultLinkedservice",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"keyVaultName": "asnmoth"
+					}
+				},
+				"secretName": "synapseSqlLoginPassword"
+			}
+		},
+		"connectVia": {
+			"referenceName": "AutoResolveIntegrationRuntime",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}
