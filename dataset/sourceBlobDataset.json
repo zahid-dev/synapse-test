@@ -3,7 +3,18 @@
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "sourceBlobLinkedservice",
-			"type": "LinkedServiceReference"
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"sourceBlobSasUri": {
+					"value": "@dataset().sourceBlobSasUri",
+					"type": "Expression"
+				}
+			}
+		},
+		"parameters": {
+			"sourceBlobSasUri": {
+				"type": "string"
+			}
 		},
 		"annotations": [],
 		"type": "DelimitedText",

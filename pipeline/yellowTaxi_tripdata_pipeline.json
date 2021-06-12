@@ -75,6 +75,12 @@
 						"referenceName": "blobToSynapseDataflow",
 						"type": "DataFlowReference",
 						"datasetParameters": {
+							"sourceBlob": {
+								"sourceBlobSasUri": {
+									"value": "@variables('sourcsBlobSasUri')",
+									"type": "Expression"
+								}
+							},
 							"sinkSynapse": {
 								"SchemaName": {
 									"value": "@pipeline().parameters.SchemaName",
@@ -155,6 +161,12 @@
 			"stagingContainer": {
 				"type": "string",
 				"defaultValue": "dlsdftxcvpocfs1"
+			}
+		},
+		"variables": {
+			"sourcsBlobSasUri": {
+				"type": "String",
+				"defaultValue": "https://yellowtripdata.blob.core.windows.net/?sv=2020-02-10&ss=bfqt&srt=sco&sp=rwdlacuptfx&se=2061-06-11T03:30:37Z&st=2021-06-10T19:30:37Z&spr=https&sig=BDYHEwS9J%2BTPthsyOcVJwY5gmFcexZI0rx00hnOt%2BCY%3D"
 			}
 		},
 		"annotations": []
