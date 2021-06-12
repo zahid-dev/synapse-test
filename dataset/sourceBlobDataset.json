@@ -5,14 +5,14 @@
 			"referenceName": "sourceBlobLinkedservice",
 			"type": "LinkedServiceReference",
 			"parameters": {
-				"sourceBlobSasUri": {
-					"value": "@dataset().sourceBlobSasUri",
+				"keyVaultName": {
+					"value": "@dataset().keyVaultName",
 					"type": "Expression"
 				}
 			}
 		},
 		"parameters": {
-			"sourceBlobSasUri": {
+			"keyVaultName": {
 				"type": "string"
 			}
 		},

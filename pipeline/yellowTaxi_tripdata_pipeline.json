@@ -76,8 +76,8 @@
 						"type": "DataFlowReference",
 						"datasetParameters": {
 							"sourceBlob": {
-								"sourceBlobSasUri": {
-									"value": "@variables('sourcsBlobSasUri')",
+								"keyVaultName": {
+									"value": "@pipeline().parameters.KeyVaultName",
 									"type": "Expression"
 								}
 							},
