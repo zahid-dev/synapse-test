@@ -23,9 +23,9 @@
 			"type": "string",
 			"defaultValue": "@{concat('https://',linkedService().datalakeAccountName,'.dfs.core.windows.net')}"
 		},
-		"sourceBlobLinkedservice_sasUri": {
-			"type": "secureString",
-			"metadata": "Secure string for 'sasUri' of 'sourceBlobLinkedservice'"
+		"sourceBlobLinkedservice_properties_typeProperties_sasUri_secretName": {
+			"type": "string",
+			"defaultValue": "sourceBlobSasUri"
 		},
 		"synapsewsmsft-WorkspaceDefaultStorage_properties_typeProperties_url": {
 			"type": "string",
@@ -117,8 +117,8 @@
 								"parameters": {},
 								"datasetParameters": {
 									"sourceBlob": {
-										"sourceBlobSasUri": {
-											"value": "@variables('sourcsBlobSasUri')",
+										"keyVaultName": {
+											"value": "@pipeline().parameters.KeyVaultName",
 											"type": "Expression"
 										}
 									},
@@ -202,12 +202,6 @@
 					"stagingContainer": {
 						"type": "string",
 						"defaultValue": "dlsdftxcvpocfs1"
-					}
-				},
-				"variables": {
-					"sourcsBlobSasUri": {
-						"type": "String",
-						"defaultValue": "https://yellowtripdata.blob.core.windows.net/?sv=2020-02-10&ss=bfqt&srt=sco&sp=rwdlacuptfx&se=2061-06-11T03:30:37Z&st=2021-06-10T19:30:37Z&spr=https&sig=BDYHEwS9J%2BTPthsyOcVJwY5gmFcexZI0rx00hnOt%2BCY%3D"
 					}
 				},
 				"annotations": []
@@ -337,14 +331,14 @@
 					"referenceName": "sourceBlobLinkedservice",
 					"type": "LinkedServiceReference",
 					"parameters": {
-						"sourceBlobSasUri": {
-							"value": "@dataset().sourceBlobSasUri",
+						"keyVaultName": {
+							"value": "@dataset().keyVaultName",
 							"type": "Expression"
 						}
 					}
 				},
 				"parameters": {
-					"sourceBlobSasUri": {
+					"keyVaultName": {
 						"type": "string"
 					}
 				},
@@ -481,14 +475,27 @@
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
 				"parameters": {
-					"sourceBlobSasUri": {
+					"keyVaultName": {
 						"type": "string"
 					}
 				},
 				"annotations": [],
 				"type": "AzureBlobStorage",
 				"typeProperties": {
-					"sasUri": "[parameters('sourceBlobLinkedservice_sasUri')]"
+					"sasUri": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "keyVaultLinkedservice",
+							"type": "LinkedServiceReference",
+							"parameters": {
+								"keyVaultName": {
+									"value": "@linkedService().keyVaultName",
+									"type": "Expression"
+								}
+							}
+						},
+						"secretName": "[parameters('sourceBlobLinkedservice_properties_typeProperties_sasUri_secretName')]"
+					}
 				},
 				"connectVia": {
 					"referenceName": "AutoResolveIntegrationRuntime",
@@ -496,7 +503,8 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
+				"[concat(variables('workspaceId'), '/linkedServices/keyVaultLinkedservice')]"
 			]
 		},
 		{

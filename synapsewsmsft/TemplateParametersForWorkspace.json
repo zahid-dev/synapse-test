@@ -17,8 +17,8 @@
 		"polybaseStagingAdlsLinkedservice_properties_typeProperties_url": {
 			"value": "@{concat('https://',linkedService().datalakeAccountName,'.dfs.core.windows.net')}"
 		},
-		"sourceBlobLinkedservice_sasUri": {
-			"value": ""
+		"sourceBlobLinkedservice_properties_typeProperties_sasUri_secretName": {
+			"value": "sourceBlobSasUri"
 		},
 		"synapsewsmsft-WorkspaceDefaultStorage_properties_typeProperties_url": {
 			"value": "https://adlsmsft.dfs.core.windows.net"
