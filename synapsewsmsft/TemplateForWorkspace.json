@@ -30,6 +30,10 @@
 		"synapsewsmsft-WorkspaceDefaultStorage_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://adlsmsft.dfs.core.windows.net"
+		},
+		"sodsSourceBlobLinkedservice_sasUri": {
+			"type": "secureString",
+			"metadata": "Secure string for 'sasUri' of 'sodsSourceBlobLinkedservice'"
 		}
 	},
 	"variables": {
@@ -595,7 +599,7 @@
 						}
 					],
 					"transformations": [],
-					"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tinferDriftedColumnTypes: true) ~> sourceBlob\nsourceBlob sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tstaged: true,\n\tallowCopyCommand: true,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tsaveOrder: 1,\n\terrorHandlingOption: 'stopOnFirstError') ~> sinkSynapse"
+					"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false) ~> sourceBlob\nsourceBlob sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tstaged: true,\n\tallowCopyCommand: true,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tsaveOrder: 1,\n\terrorHandlingOption: 'stopOnFirstError') ~> sinkSynapse"
 				}
 			},
 			"dependsOn": [
@@ -652,6 +656,445 @@
 			"apiVersion": "2019-06-01-preview",
 			"properties": {},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/sods_population_and_yellowTaxi_pipeline')]",
+			"type": "Microsoft.Synapse/workspaces/pipelines",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"activities": [
+					{
+						"name": "Create Schema If Not Exists",
+						"description": "This activity creates the schema, if not exists. The name of the schema is specified in the pipeline parameter 'SchemaName\".",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.00:03:00",
+							"retry": 3,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlDWSource",
+								"sqlReaderQuery": {
+									"value": "IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = '@{pipeline().parameters.SchemaName}')\nBEGIN\nEXEC('CREATE SCHEMA @{pipeline().parameters.SchemaName}')\nselect Count(*) from sys.symmetric_keys;\nEND\nELSE\nBEGIN\n    select Count(*) from sys.symmetric_keys;\nEND",
+									"type": "Expression"
+								},
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "createSchemaDataset",
+								"type": "DatasetReference",
+								"parameters": {
+									"SynapseWorkspaceName": {
+										"value": "@pipeline().parameters.SynapseWorkspaceName",
+										"type": "Expression"
+									},
+									"SQLDedicatedPoolName": {
+										"value": "@pipeline().parameters.SQLDedicatedPoolName",
+										"type": "Expression"
+									},
+									"SQLLoginUsername": {
+										"value": "@pipeline().parameters.SQLLoginUsername",
+										"type": "Expression"
+									},
+									"keyVaultName": {
+										"value": "@pipeline().parameters.KeyVaultName",
+										"type": "Expression"
+									}
+								}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "Copy Data From Blob To Synapse",
+						"description": "This activity copies data from the public blob and loads that data into synapse sql pool.",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [
+							{
+								"activity": "Create Schema If Not Exists",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "1.00:00:00",
+							"retry": 3,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "sodsBlobToSynapseDataflow",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"sourceBlobPopulation": {},
+									"sourceBlobYellowTaxi": {},
+									"sinkSynapsePopulation": {
+										"SynapseWorkspaceName": {
+											"value": "@pipeline().parameters.SynapseWorkspaceName",
+											"type": "Expression"
+										},
+										"SQLDedicatedPoolName": {
+											"value": "@pipeline().parameters.SQLDedicatedPoolName",
+											"type": "Expression"
+										},
+										"SQLLoginUsername": {
+											"value": "@pipeline().parameters.SQLLoginUsername",
+											"type": "Expression"
+										},
+										"keyVaultName": {
+											"value": "@pipeline().parameters.KeyVaultName",
+											"type": "Expression"
+										},
+										"SchemaName": {
+											"value": "@pipeline().parameters.SchemaName",
+											"type": "Expression"
+										}
+									},
+									"sinkSynapseYellowTaxi": {
+										"SynapseWorkspaceName": {
+											"value": "@pipeline().parameters.SynapseWorkspaceName",
+											"type": "Expression"
+										},
+										"SQLDedicatedPoolName": {
+											"value": "@pipeline().parameters.SQLDedicatedPoolName",
+											"type": "Expression"
+										},
+										"SQLLoginUsername": {
+											"value": "@pipeline().parameters.SQLLoginUsername",
+											"type": "Expression"
+										},
+										"keyVaultName": {
+											"value": "@pipeline().parameters.KeyVaultName",
+											"type": "Expression"
+										},
+										"SchemaName": {
+											"value": "@pipeline().parameters.SchemaName",
+											"type": "Expression"
+										}
+									}
+								}
+							},
+							"staging": {
+								"linkedService": {
+									"referenceName": "polybaseStagingAdlsLinkedservice",
+									"type": "LinkedServiceReference",
+									"parameters": {
+										"keyVaultName": {
+											"value": "@pipeline().parameters.KeyVaultName",
+											"type": "Expression"
+										},
+										"datalakeAccountName": {
+											"value": "@pipeline().parameters.datalakeAccountName",
+											"type": "Expression"
+										}
+									}
+								},
+								"folderPath": {
+									"value": "@pipeline().parameters.stagingContainer",
+									"type": "Expression"
+								}
+							},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"parameters": {
+					"SchemaName": {
+						"type": "string",
+						"defaultValue": "sods"
+					},
+					"SynapseWorkspaceName": {
+						"type": "string",
+						"defaultValue": "synapsewsmsft.database.windows.net"
+					},
+					"SQLDedicatedPoolName": {
+						"type": "string",
+						"defaultValue": "sqlpoolmsft"
+					},
+					"SQLLoginUsername": {
+						"type": "string",
+						"defaultValue": "osama"
+					},
+					"KeyVaultName": {
+						"type": "string",
+						"defaultValue": "kvmsft"
+					},
+					"datalakeAccountName": {
+						"type": "string",
+						"defaultValue": "adlsmsft"
+					},
+					"stagingContainer": {
+						"type": "string",
+						"defaultValue": "filesystemmsft"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/datasets/createSchemaDataset')]",
+				"[concat(variables('workspaceId'), '/dataflows/sodsBlobToSynapseDataflow')]",
+				"[concat(variables('workspaceId'), '/linkedServices/polybaseStagingAdlsLinkedservice')]",
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/sodsBlobToSynapseDataflow')]",
+			"type": "Microsoft.Synapse/workspaces/dataflows",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "sodsSourceBlobPopulationDataset",
+								"type": "DatasetReference"
+							},
+							"name": "sourceBlobPopulation"
+						},
+						{
+							"dataset": {
+								"referenceName": "sodsSourceBlobYellowTaxiDataset",
+								"type": "DatasetReference"
+							},
+							"name": "sourceBlobYellowTaxi"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "sodsSinkSynapsePopulationDataset",
+								"type": "DatasetReference"
+							},
+							"name": "sinkSynapsePopulation"
+						},
+						{
+							"dataset": {
+								"referenceName": "sodsSinkSynapseYellowTaxiDataset",
+								"type": "DatasetReference"
+							},
+							"name": "sinkSynapseYellowTaxi"
+						}
+					],
+					"transformations": [],
+					"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tlimit: 1000,\n\tignoreNoFilesFound: false,\n\twildcardPaths:['population-unix-hdr/population.csv']) ~> sourceBlobPopulation\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tlimit: 1000,\n\tignoreNoFilesFound: false,\n\twildcardPaths:['taxi/*']) ~> sourceBlobYellowTaxi\nsourceBlobPopulation sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tstaged: true,\n\tallowCopyCommand: true,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sinkSynapsePopulation\nsourceBlobYellowTaxi sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tstaged: true,\n\tallowCopyCommand: true,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sinkSynapseYellowTaxi"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/datasets/sodsSourceBlobPopulationDataset')]",
+				"[concat(variables('workspaceId'), '/datasets/sodsSourceBlobYellowTaxiDataset')]",
+				"[concat(variables('workspaceId'), '/datasets/sodsSinkSynapsePopulationDataset')]",
+				"[concat(variables('workspaceId'), '/datasets/sodsSinkSynapseYellowTaxiDataset')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/sodsSourceBlobLinkedservice')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"sasUri": "[parameters('sodsSourceBlobLinkedservice_sasUri')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/sodsSourceBlobPopulationDataset')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "sodsSourceBlobLinkedservice",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "population.csv",
+						"folderPath": "population-unix-hdr",
+						"container": "csv"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/sodsSourceBlobLinkedservice')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/sodsSinkSynapsePopulationDataset')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "sinkSynapseLinkedservice",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"SynapseWorkspaceName": {
+							"value": "@dataset().SynapseWorkspaceName",
+							"type": "Expression"
+						},
+						"SQLDedicatedPoolName": {
+							"value": "@dataset().SQLDedicatedPoolName",
+							"type": "Expression"
+						},
+						"SQLLoginUsername": {
+							"value": "@dataset().SQLLoginUsername",
+							"type": "Expression"
+						},
+						"keyVaultName": {
+							"value": "@dataset().keyVaultName",
+							"type": "Expression"
+						}
+					}
+				},
+				"parameters": {
+					"SynapseWorkspaceName": {
+						"type": "string"
+					},
+					"SQLDedicatedPoolName": {
+						"type": "string"
+					},
+					"SQLLoginUsername": {
+						"type": "string"
+					},
+					"keyVaultName": {
+						"type": "string"
+					},
+					"SchemaName": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlDWTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": {
+						"value": "@dataset().SchemaName",
+						"type": "Expression"
+					},
+					"table": "population"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/sinkSynapseLinkedservice')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/sodsSourceBlobYellowTaxiDataset')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "sodsSourceBlobLinkedservice",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": "taxi",
+						"container": "csv"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/sodsSourceBlobLinkedservice')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/sodsSinkSynapseYellowTaxiDataset')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "sinkSynapseLinkedservice",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"SynapseWorkspaceName": {
+							"value": "@dataset().SynapseWorkspaceName",
+							"type": "Expression"
+						},
+						"SQLDedicatedPoolName": {
+							"value": "@dataset().SQLDedicatedPoolName",
+							"type": "Expression"
+						},
+						"SQLLoginUsername": {
+							"value": "@dataset().SQLLoginUsername",
+							"type": "Expression"
+						},
+						"keyVaultName": {
+							"value": "@dataset().keyVaultName",
+							"type": "Expression"
+						}
+					}
+				},
+				"parameters": {
+					"SynapseWorkspaceName": {
+						"type": "string"
+					},
+					"SQLDedicatedPoolName": {
+						"type": "string"
+					},
+					"SQLLoginUsername": {
+						"type": "string"
+					},
+					"keyVaultName": {
+						"type": "string"
+					},
+					"SchemaName": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlDWTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": {
+						"value": "@dataset().SchemaName",
+						"type": "Expression"
+					},
+					"table": "yellowTaxi"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/sinkSynapseLinkedservice')]"
+			]
 		}
 	]
 }
