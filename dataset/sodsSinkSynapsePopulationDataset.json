@@ -47,7 +47,8 @@
 			"schema": {
 				"value": "@dataset().SchemaName",
 				"type": "Expression"
-			}
+			},
+			"table": "population"
 		}
 	}
 }
