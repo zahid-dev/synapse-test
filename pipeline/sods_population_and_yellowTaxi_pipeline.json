@@ -75,7 +75,29 @@
 						"referenceName": "sodsBlobToSynapseDataflow",
 						"type": "DataFlowReference",
 						"datasetParameters": {
-							"sinkSynapse": {
+							"sinkSynapsePopulation": {
+								"SynapseWorkspaceName": {
+									"value": "@pipeline().parameters.SynapseWorkspaceName",
+									"type": "Expression"
+								},
+								"SQLDedicatedPoolName": {
+									"value": "@pipeline().parameters.SQLDedicatedPoolName",
+									"type": "Expression"
+								},
+								"SQLLoginUsername": {
+									"value": "@pipeline().parameters.SQLLoginUsername",
+									"type": "Expression"
+								},
+								"keyVaultName": {
+									"value": "@pipeline().parameters.KeyVaultName",
+									"type": "Expression"
+								},
+								"SchemaName": {
+									"value": "@pipeline().parameters.SchemaName",
+									"type": "Expression"
+								}
+							},
+							"sinkSynapseYellowTaxi": {
 								"SynapseWorkspaceName": {
 									"value": "@pipeline().parameters.SynapseWorkspaceName",
 									"type": "Expression"

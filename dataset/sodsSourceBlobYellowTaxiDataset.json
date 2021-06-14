@@ -1,0 +1,23 @@
+{
+	"name": "sodsSourceBlobYellowTaxiDataset",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "sodsSourceBlobLinkedservice",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": "taxi",
+				"container": "csv"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
