@@ -3,7 +3,18 @@
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "sodsSourceBlobLinkedservice",
-			"type": "LinkedServiceReference"
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"keyVaultName": {
+					"value": "@dataset().keyVaultName",
+					"type": "Expression"
+				}
+			}
+		},
+		"parameters": {
+			"keyVaultName": {
+				"type": "string"
+			}
 		},
 		"annotations": [],
 		"type": "DelimitedText",

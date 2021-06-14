@@ -75,6 +75,18 @@
 						"referenceName": "sodsBlobToSynapseDataflow",
 						"type": "DataFlowReference",
 						"datasetParameters": {
+							"sourceBlobPopulation": {
+								"keyVaultName": {
+									"value": "@pipeline().parameters.KeyVaultName",
+									"type": "Expression"
+								}
+							},
+							"sourceBlobYellowTaxi": {
+								"keyVaultName": {
+									"value": "@pipeline().parameters.KeyVaultName",
+									"type": "Expression"
+								}
+							},
 							"sinkSynapsePopulation": {
 								"SynapseWorkspaceName": {
 									"value": "@pipeline().parameters.SynapseWorkspaceName",
