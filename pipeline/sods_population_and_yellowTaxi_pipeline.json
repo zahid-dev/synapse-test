@@ -72,7 +72,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "SodsBlobToSynapseDataflow",
+						"referenceName": "sodsBlobToSynapseDataflow",
 						"type": "DataFlowReference",
 						"datasetParameters": {
 							"sinkSynapse": {
