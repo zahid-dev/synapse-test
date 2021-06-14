@@ -130,7 +130,7 @@
 		"parameters": {
 			"SchemaName": {
 				"type": "string",
-				"defaultValue": "yellowTaxi"
+				"defaultValue": "sods"
 			},
 			"SynapseWorkspaceName": {
 				"type": "string",
