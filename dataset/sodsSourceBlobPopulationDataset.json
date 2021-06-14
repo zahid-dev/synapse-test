@@ -1,0 +1,23 @@
+{
+	"name": "sodsSourceBlobPopulationDataset",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "sodsSourceBlobLinkedservice",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "population.csv",
+				"folderPath": "population-unix-hdr",
+				"container": "csv"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}

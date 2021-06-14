@@ -1,0 +1,28 @@
+{
+	"name": "SodsBlobToSynapseDataflow",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "sodsSourceBlobPopulationDataset",
+						"type": "DatasetReference"
+					},
+					"name": "sourceBlob"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "sodsSinkSynapsePopulationDataset",
+						"type": "DatasetReference"
+					},
+					"name": "sinkSynapse"
+				}
+			],
+			"transformations": [],
+			"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tlimit: 1000,\n\tignoreNoFilesFound: false,\n\twildcardPaths:['population-unix-hdr/population.csv']) ~> sourceBlob\nsourceBlob sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tstaged: true,\n\tallowCopyCommand: true,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sinkSynapse"
+		}
+	}
+}
