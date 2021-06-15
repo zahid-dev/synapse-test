@@ -1,12 +1,9 @@
 {
-	"name": "tripFaresData",
+	"name": "tripsDataSource",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "HttpServerTripFareDataLinkedService",
+			"referenceName": "HttpServerTripDataLinkedService",
 			"type": "LinkedServiceReference"
-		},
-		"folder": {
-			"name": "TripFareDatasets"
 		},
 		"annotations": [],
 		"type": "DelimitedText",

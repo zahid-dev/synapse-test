@@ -1,18 +1,17 @@
 {
-	"name": "tripFaresData",
+	"name": "tripFaresDataSink",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "HttpServerTripFareDataLinkedService",
+			"referenceName": "TripFaresDataLakeStorageLinkedService",
 			"type": "LinkedServiceReference"
-		},
-		"folder": {
-			"name": "TripFareDatasets"
 		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
-				"type": "HttpServerLocation"
+				"type": "AzureBlobFSLocation",
+				"fileName": "tripdata.csv",
+				"fileSystem": "staging-container"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
