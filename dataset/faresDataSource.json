@@ -1,5 +1,5 @@
 {
-	"name": "tripFaresData",
+	"name": "faresDataSource",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "HttpServerTripFareDataLinkedService",

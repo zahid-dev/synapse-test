@@ -1,9 +1,12 @@
 {
-	"name": "tripFaresDataSink",
+	"name": "faresDataSink",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "TripFaresDataLakeStorageLinkedService",
 			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "TripFareDatasets"
 		},
 		"annotations": [],
 		"type": "DelimitedText",

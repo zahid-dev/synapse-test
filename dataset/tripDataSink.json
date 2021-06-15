@@ -5,6 +5,9 @@
 			"referenceName": "TripFaresDataLakeStorageLinkedService",
 			"type": "LinkedServiceReference"
 		},
+		"folder": {
+			"name": "TripFareDatasets"
+		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
