@@ -1,0 +1,25 @@
+{
+	"name": "tripdataset",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "HttpServerTripFareDataLinkedService",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "TripFareDatasets"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "HttpServerLocation",
+				"relativeUrl": "/TripData.csv"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
