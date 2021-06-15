@@ -9,7 +9,7 @@
 		"type": "AzureSqlDWTable",
 		"schema": [],
 		"typeProperties": {
-			"schema": "dbo",
+			"schema": "tripfare",
 			"table": "AggregateTaxiData"
 		}
 	}

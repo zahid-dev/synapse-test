@@ -121,13 +121,7 @@
 				"type": "ExecuteDataFlow",
 				"dependsOn": [
 					{
-						"activity": "IngestTripFaresDataIntoADLS",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					},
-					{
-						"activity": "IngestTripDataIntoADLS",
+						"activity": "Create Schema If Does Not Exists",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -151,6 +145,47 @@
 						"computeType": "General"
 					},
 					"traceLevel": "Fine"
+				}
+			},
+			{
+				"name": "Create Schema If Does Not Exists",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "IngestTripDataIntoADLS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "IngestTripFaresDataIntoADLS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlDWSource",
+						"sqlReaderQuery": {
+							"value": "select Count(*) from sys.symmetric_keys;\nBEGIN\nEXEC('CREATE SCHEMA tripfare')\nEND",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "azureSynapseAnalyticsTable",
+						"type": "DatasetReference"
+					}
 				}
 			}
 		],
