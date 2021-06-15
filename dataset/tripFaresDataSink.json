@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "tripdata.csv",
+				"fileName": "fares-data.csv",
 				"fileSystem": "staging-container"
 			},
 			"columnDelimiter": ",",
